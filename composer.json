@@ -1,5 +1,5 @@
 {
-    "name": "paulodiff/RainbowTableIndex",
+    "name": "paulodiff/rainbow-table-index",
     "type": "library",
     "description": "Laravel database data encryption with full text search.",
     "keywords": [
@@ -11,13 +11,13 @@
 	"orm",
 	"eloquent"
     ],
-    "homepage": "https://github.com/paulodiff/RainbowTableIndex",
+    "homepage": "https://github.com/paulodiff/rainbow-table-index",
     "license": "MIT",
     "authors": [
         {
             "name": "PauloDiff",
             "email": "paulo.difficiliora@gmail.com",
-            "homepage": "https://github.com/paulodiff/RainbowTableIndex"
+            "homepage": "https://github.com/paulodiff/rainbow-table-index"
         }
     ],
     "require": {
