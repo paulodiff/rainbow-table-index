@@ -1,0 +1,35 @@
+{
+    "name": "paulodiff/RainbowTableIndex",
+    "type": "library",
+    "description": "Laravel database data encryption with full text search.",
+    "keywords": [
+        "database",
+        "encryption",
+        "full",
+	"text",
+	"search",
+	"orm",
+	"eloquent"
+    ],
+    "homepage": "https://github.com/paulodiff/RainbowTableIndex",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "PauloDiff",
+            "email": "paulo.difficiliora@gmail.com",
+            "homepage": "https://github.com/paulodiff/RainbowTableIndex"
+        }
+    ],
+    "require": {
+        "php": "^7.1.8 || ^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "RainbowTableIndex\\": "src/RainbowTableIndex/"
+        }
+    },
+    
+    "minimum-stability": "dev",
+    "prefer-stable": true
+   
+}
