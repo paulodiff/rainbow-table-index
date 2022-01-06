@@ -21,8 +21,8 @@ class RainbowTableIndex02SeedDataTest extends TestCase
 {
 
     // -------------------- TO CHANGE ---------------------------------------
-    public $NUM_OF_AUTHORS_TO_CREATE = 1;
-    public $NUM_OF_POSTS_TO_CREATE = 1;
+    public $NUM_OF_AUTHORS_TO_CREATE = 100;
+    public $NUM_OF_POSTS_TO_CREATE = 2;
     public $NUM_OF_COMMENTS_TO_CREATE = 5;
     // -------------------- TO CHANGE ---------------------------------------
 
