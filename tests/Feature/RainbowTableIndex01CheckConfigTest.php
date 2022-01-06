@@ -3,10 +3,10 @@
 // php artisan test --testsuite=Feature --stop-on-failure
 // php artisan test --testsuite=Feature --filter=RainbowTableIndex01CheckConfigTest --stop-on-failure
 
-namespace Tests\Feature;
+namespace Paulodiff\RainbowTableIndex\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Paulodiff\RainbowTableIndex\Tests\TestCase;
 
 use DB;
 use Illuminate\Support\Facades\Log;
@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Faker\Factory as Faker;
 
-use App\RainbowTableIndex\RainbowTableIndexEncrypter;
-use App\RainbowTableIndex\RainbowTableIndexService;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexEncrypter;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexService;
 
 
 class RainbowTableIndex01CheckConfigTest extends TestCase
@@ -30,10 +30,10 @@ class RainbowTableIndex01CheckConfigTest extends TestCase
         // Test database connection
         Log::channel('stderr')->info('CheckConfig:', ['Checking db connection'] );
         try {
-            DB::connection()->getPdo();
-            Log::channel('stderr')->info('CheckConfig:', ['db connection OK'] );
+            $p = DB::connection()->getPdo();
+            Log::channel('stderr')->info('CheckConfig:', ['DB connection OK', $p] );
         } catch (\Exception $e) {
-            Log::channel('stderr')->error('CheckConfig:', ['db connection ERROR!', $e] );
+            Log::channel('stderr')->error('CheckConfig:', ['DB connection ERROR!', $e] );
             $this->assertTrue(false);
         }
 
@@ -89,22 +89,28 @@ class RainbowTableIndex01CheckConfigTest extends TestCase
             $this->assertTrue(false);
         }
 
-        Log::channel('stderr')->info('CheckConfig:', ['Checking .env Rainbow parameter'] );
+        Log::channel('stderr')->info('CheckConfig:', ['Checking .env Rainbow parameter',
+      
+                
+        ] );
 
-        if (config('rainbowtableindex.key') && config('rainbowtableindex.nonce') ) {
-            Log::channel('stderr')->info('CheckConfig:', ['Check .env Rainbow parameter OK '] );
-
-            // Test Encryption Function
-
-            $test = "test";
-            $md5 = hash("md5", $test);
-            $sha1 = hash("sha1", $test);
-            // $h1 = RainbowTableIndexEncrypter::hash($test);
-            Log::channel('stderr')->info('Hash("test"):', [$md5, $sha1] );
+        if (    
+            ( config('rainbowtableindex.key')     !==  null) && 
+            ( config('rainbowtableindex.nonce')   !==  null) &&
+            ( config('rainbowtableindex.encrypt') !==  null ) 
+            ) {
+                 // $h1 = RainbowTableIndexEncrypter::hash($test);
+            Log::channel('stderr')->info('CheckConfig:', [
+                'Environment vars OK!',
+                config('rainbowtableindex.key'),
+                config('rainbowtableindex.nonce'),
+                config('rainbowtableindex.encrypt')
+            ] );
             // $h2 = RainbowTableIndexEncrypter::short_hash($test);
             // Log::channel('stderr')->info('Short_Hash("test"):', [$h2] );
 
         } else {
+            
             Log::channel('stderr')->info('CheckConfig:', ['!ERROR! .env parameters NOT FOUND, check config/rainbowtableindex.php configuration, add this following values to .env and run '] );
             $key = sodium_crypto_secretbox_keygen();
             $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
@@ -114,18 +120,16 @@ class RainbowTableIndex01CheckConfigTest extends TestCase
             Log::channel('stderr')->info('RAINBOW_TABLE_INDEX_NONCE=' . sodium_bin2base64( $nonce , SODIUM_BASE64_VARIANT_ORIGINAL ), [] );
             Log::channel('stderr')->info('RAINBOW_TABLE_INDEX_ENCRYPT=true', ['false only for debugging purpose'] );
 
-
-
-
             $this->assertTrue(false);
         }
 
         Log::channel('stderr')->info('CheckConfig:', ['Checking RainbowTableService'] );
         try {
-            $rtService = new \App\RainbowTableIndex\RainbowTableIndexService();
+            $rtService = new \Paulodiff\RainbowTableIndex\RainbowTableIndexService();
             Log::channel('stderr')->info('CheckConfig:', ['Rainbow index creating ...  TAG DEMO'] );
-            $rtService->setRT('TEST','DEMO',999);
-            Log::channel('stderr')->info('CheckConfig:', ['Rainbow index OK'] );
+            $value = random_int ( 1, 1000 );
+            $rtService->setRT('TEST','DEMO', $value);
+            Log::channel('stderr')->info('CheckConfig:', ['Rainbow index OK', $value] );
             Log::channel('stderr')->info('CheckConfig:', ['Check database for table rt_test!!!!!'] );
         } catch (\Exception $e) {
             Log::channel('stderr')->error('CheckConfig:', ['Rainbow ERROR', $e] );

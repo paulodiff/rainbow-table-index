@@ -1,9 +1,5 @@
 <?php
-/**
- * src/Encryption.php.
- *
- */
-namespace App\RainbowTableIndex;
+namespace Paulodiff\RainbowTableIndex;
 
 use Illuminate\Support\Facades\Log;
 

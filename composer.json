@@ -1,35 +1,56 @@
 {
     "name": "paulodiff/rainbow-table-index",
-    "type": "library",
-    "description": "Laravel database data encryption with full text search.",
+    "description": "Laravel database data encryption with full text search",
     "keywords": [
+        "laravel",
         "database",
         "encryption",
         "full",
-	"text",
-	"search",
-	"orm",
-	"eloquent"
+        "text",
+        "search",
+        "rainbow-table-index"
     ],
     "homepage": "https://github.com/paulodiff/rainbow-table-index",
     "license": "MIT",
+    "type": "library",
     "authors": [
         {
-            "name": "PauloDiff",
+            "name": "Paulodiff",
             "email": "paulo.difficiliora@gmail.com",
-            "homepage": "https://github.com/paulodiff/rainbow-table-index"
+            "role": "Developer"
         }
     ],
     "require": {
-        "php": "^7.1.8 || ^8.0"
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
         "psr-4": {
-            "RainbowTableIndex\\": "src"
+            "Paulodiff\\RainbowTableIndex\\": "src"
         }
     },
-    
-    "minimum-stability": "dev",
-    "prefer-stable": true
-   
+    "autoload-dev": {
+        "psr-4": {
+            "Paulodiff\\RainbowTableIndex\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Paulodiff\\RainbowTableIndex\\RainbowTableIndexServiceProvider"
+            ]
+        }
+    }
 }

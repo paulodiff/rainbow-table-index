@@ -1,13 +1,12 @@
 <?php
-
-namespace App\RainbowTableIndex;
+namespace Paulodiff\RainbowTableIndex;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 
-use App\RainbowTableIndex\RainbowTableIndexEncrypter;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexEncrypter;
 
 // class RainbowTableService implements RainbowTableServiceInterface
 class RainbowTableIndexService

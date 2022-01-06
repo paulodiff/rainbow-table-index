@@ -2,10 +2,10 @@
 
 // php artisan test --testsuite=Feature --filter=RainbowTableIndex02SeedDataTest --stop-on-failure
 
-namespace Tests\Feature;
+namespace Paulodiff\RainbowTableIndex\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Paulodiff\RainbowTableIndex\Tests\TestCase;
 
 use DB;
 use Illuminate\Support\Facades\Log;
@@ -13,18 +13,16 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Faker\Factory as Faker;
 
-use App\RainbowTableIndex\RainbowTableIndexService;
-use App\Models\Author;
-use App\Models\Post;
-
-
+use Paulodiff\RainbowTableIndex\RainbowTableIndexService;
+use Paulodiff\RainbowTableIndex\Tests\Models\Author;
+use Paulodiff\RainbowTableIndex\Tests\Models\Post;
 
 class RainbowTableIndex02SeedDataTest extends TestCase
 {
 
     // -------------------- TO CHANGE ---------------------------------------
-    public $NUM_OF_AUTHORS_TO_CREATE = 100;
-    public $NUM_OF_POSTS_TO_CREATE = 5;
+    public $NUM_OF_AUTHORS_TO_CREATE = 1;
+    public $NUM_OF_POSTS_TO_CREATE = 1;
     public $NUM_OF_COMMENTS_TO_CREATE = 5;
     // -------------------- TO CHANGE ---------------------------------------
 
@@ -59,9 +57,19 @@ class RainbowTableIndex02SeedDataTest extends TestCase
         Comment::truncate();
         */
 
-        Log::channel('stderr')->info('SeedData:', ['destroy authors ... ']);
+        Log::channel('stderr')->info('SeedData:', ['destroy authors rainbox index... ']);
         Author::destroyRainbowIndex();
-        Author::truncate();
+
+        Log::channel('stderr')->info('SeedData:', ['destroy authors table... ']);
+        try
+        {
+            Author::truncate();
+        } 
+        catch (\Exception $e) 
+        {
+            Log::channel('stderr')->error('SeedData:', ['ERROR deleting Authors table', $e] );
+            // die("ERRORE RainbowTableService re check previuos step!" . $e );
+        }
 
         Log::channel('stderr')->info('SeedData:', ['start insert! ... ']);
 /*

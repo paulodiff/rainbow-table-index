@@ -1,13 +1,13 @@
 <?php
-namespace App\RainbowTableIndex;
+namespace Paulodiff\RainbowTableIndex;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-use App\RainbowTableIndex\RainbowTableIndexQueryBuilder;
-use App\RainbowTableIndex\RainbowTableIndexEncrypter;
-use App\RainbowTableIndex\RainbowTableIndexService;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexQueryBuilder;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexEncrypter;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexService;
 
 
 trait RainbowTableIndexTrait
@@ -98,7 +98,7 @@ trait RainbowTableIndexTrait
       $o = parent::save($data);
       // static::query()->save();
 
-      $rtService = new \App\RainbowTableIndex\RainbowTableIndexService();
+      $rtService = new \Paulodiff\RainbowTableIndex\RainbowTableIndexService();
 
       // dal modello usando la configurazione prepara un elenco di campi che devono essere indicizzati poichè in una tabella i campi da
       // fulltext protrebbero essere più di uno
@@ -373,7 +373,7 @@ trait RainbowTableIndexTrait
       Log::debug('RainbowTrait!rebuildRainbowIndex', [] );
       // static::query()->save();
 
-      $rtService = new \App\RainbowTableIndex\RainbowTableIndexService();
+      $rtService = new \Paulodiff\RainbowTableIndex\RainbowTableIndexService();
 
       // dal modello usando la configurazione prepara un elenco di campi che devono essere indicizzati poichè in una tabella i campi da
       // fulltext protrebbero essere più di uno
@@ -406,7 +406,7 @@ trait RainbowTableIndexTrait
     {
       Log::debug('RainbowTrait!destroyRainbowIndex', ['Start ... '] );
 
-      $rtService = new \App\RainbowTableIndex\RainbowTableIndexService();
+      $rtService = new \Paulodiff\RainbowTableIndex\RainbowTableIndexService();
 
       $conf = self::$rainbowTableIndexConfig;
       $toIndex = [];
@@ -445,7 +445,7 @@ trait RainbowTableIndexTrait
       Log::debug('RainbowTrait!rebuildFullRainbowIndex', [] );
       // static::query()->save();
 
-      $rtService = new \App\RainbowTableIndex\RainbowTableIndexService();
+      $rtService = new \Paulodiff\RainbowTableIndex\RainbowTableIndexService();
 
       // dal modello usando la configurazione prepara un elenco di campi che devono essere indicizzati poichè in una tabella i campi da
       // fulltext protrebbero essere più di uno

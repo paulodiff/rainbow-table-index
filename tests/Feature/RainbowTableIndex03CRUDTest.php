@@ -2,10 +2,10 @@
 
 // php artisan test --testsuite=Feature --filter=RainbowTableIndex03CRUDTest --stop-on-failure
 
-namespace Tests\Feature;
+namespace Paulodiff\RainbowTableIndex\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Paulodiff\RainbowTableIndex\Tests\TestCase;
 
 use DB;
 use Illuminate\Support\Facades\Log;
@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Faker\Factory as Faker;
 
-use App\RainbowTableIndex\RainbowTableIndexService;
-use App\RainbowTableIndex\RainbowTableIndexTrait;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexService;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
 
-use App\Models\Post;
-use App\Models\Author;
+use Paulodiff\RainbowTableIndex\Tests\Models\Author;
+use Paulodiff\RainbowTableIndex\Tests\Models\Post;
 
 
 
@@ -184,7 +184,7 @@ class RainbowTableIndex03CRUDTest extends TestCase
 
         }
 
-
+        $this->assertTrue(true);
 
     }
 
@@ -224,6 +224,7 @@ class RainbowTableIndex03CRUDTest extends TestCase
 
       // update this data
 
+      $this->assertTrue(true);
 
     }
 

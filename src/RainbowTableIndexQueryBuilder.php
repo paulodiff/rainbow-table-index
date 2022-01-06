@@ -1,12 +1,12 @@
 <?php
-namespace App\RainbowTableIndex;
+namespace Paulodiff\RainbowTableIndex;
 
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 
-use App\RainbowTableIndex\RainbowTableIndexEncrypter;
-use App\RainbowTableIndex\RainbowTableIndexService;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexEncrypter;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexService;
 
 
 class RainbowTableIndexQueryBuilder extends Builder {
@@ -22,7 +22,7 @@ class RainbowTableIndexQueryBuilder extends Builder {
         $obj = new RainbowTableIndexQueryBuilder($q); 
         $obj->enc_fields = $p;
         // other initialization
-        $obj->rtService = new \App\RainbowTableIndex\RainbowTableIndexService();
+        $obj->rtService = new \Paulodiff\RainbowTableIndex\RainbowTableIndexService();
         return $obj;
     }
 

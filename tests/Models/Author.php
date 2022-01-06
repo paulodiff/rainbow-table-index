@@ -1,11 +1,10 @@
 <?php
-
-namespace App\Models;
+namespace Paulodiff\RainbowTableIndex\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\RainbowTableIndex\RainbowTableIndexTrait;
+use  Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
 
 class Author extends Model
 {
