@@ -123,16 +123,22 @@ The library can be used in contexts where it is necessary to guarantee the priva
 Create a Laravel Application
 
 ```bash
-composer create-project laravel/laravel rainbow-table-index
-cd rainbow-table-index
+composer create-project laravel/laravel rainbow-table-index-app
+cd rainbow-table-index-app
+composer require paulodiff/rainbow-table-index
 ```
 
-https://github.com/paulodiff/RainbowTableIndex.git
+https://github.com/paulodiff/rainbow-table-index.git
 
 Copy the following files in folder
 
+Publish config  ... TODO
+
 
 ```bash
+
+TO REVIEW!!!! WORK IN PROGRESS ....
+
 copy rainbowtable.php -> rainbow-table-index\config
 
 create folder rainbow-table-index\app\RainbowTable
