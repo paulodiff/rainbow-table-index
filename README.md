@@ -2,6 +2,11 @@
 
 # 🚨 DO NOT USE IN PRODUCTION! 🚨
 
+<p align="center">
+    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Built_for-Laravel-green.svg?style=flat-square"></a>
+   
+</p>
+
 ## Introduction
 
 Database data encryption is a must-have and it's very simple to encrypt data in database using Laravel Eloquent ORM casts:
