@@ -3,6 +3,7 @@ namespace Paulodiff\RainbowTableIndex;
 
 use Illuminate\Support\ServiceProvider;
 use Paulodiff\RainbowTableIndex\Console\RainbowTableIndexKeyGeneratorCommand;
+use Paulodiff\RainbowTableIndex\Console\RainbowTableIndexCheckConfigCommand;
 
 class RainbowTableIndexServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,7 @@ class RainbowTableIndexServiceProvider extends ServiceProvider
             if ($this->app->runningInConsole()) {
                 $this->commands([
                     RainbowTableIndexKeyGeneratorCommand::class,
+                    RainbowTableIndexCheckConfigCommand::class
                 ]);
             }
 

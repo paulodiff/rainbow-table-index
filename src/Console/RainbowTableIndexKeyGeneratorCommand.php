@@ -13,12 +13,12 @@ class RainbowTableIndexKeyGeneratorCommand extends Command
 
     public function handle()
     {
-        $this->info('Key generator ...');
+        $this->info('RainbowTableIndex Key generator ...');
 
         // $this->info('Publishing configuration...');
         $key = sodium_crypto_secretbox_keygen();
-        $this->info($key);
-        $this->info(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        // $this->info($key);
+        // $this->info(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
 
 

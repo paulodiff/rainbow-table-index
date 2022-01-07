@@ -158,8 +158,24 @@ composer require paulodiff/rainbow-table-index
 // publishing
 php artisan vendor:publish --provider="Paulodiff\RainbowTableIndex\RainbowTableIndexServiceProvider" --tag="config"
 
+php artisan RainbowTableIndex:keyGenerator
+
+.env
+RAINBOW_TABLE_INDEX_KEY=HfP+3eMCN/V6oMf9UgLt6hCtS3X3pklPc2M039xwMQI=
+RAINBOW_TABLE_INDEX_NONCE=XaCEPxsuyPsRle2z0zQ2MMM2MHb6Lfty
+RAINBOW_TABLE_INDEX_ENCRYPT=true
 
 ```
+
+php artisan RainbowTableIndex:checkConfig
+
+
+php artisan RainbowTableIndex:demoSeed
+
+
+php artisan RainbowTableIndex:demoStats
+
+
 
 
 ```bash

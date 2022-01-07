@@ -8,18 +8,18 @@ use Illuminate\Support\Facades\Log;
 
 use Paulodiff\RainbowTableIndex\Tests\TestCase;
 
-class KeyGeneratorCommandTest extends TestCase
+class CheckConfigCommandTest extends TestCase
 {
     /** @test */
-    function the_key_generator_command()
+    function the_check_config_command()
     {
         // make sure we're starting from a clean state
         // if (File::exists(config_path('blogpackage.php'))) {
         //     unlink(config_path('blogpackage.php'));
         // }
         // $this->assertFalse(File::exists(config_path('blogpackage.php')));
-        Log::channel('stderr')->info('keyGenerator:artisan command', [] );
-        Artisan::call('RainbowTableIndex:keyGenerator');
+        Log::channel('stderr')->info('CheckConfig:artisan command', [] );
+        Artisan::call('RainbowTableIndex:checkConfig');
 
         // $this->assertTrue(File::exists(config_path('blogpackage.php')));
         $this->assertTrue(true);
