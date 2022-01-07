@@ -8,6 +8,8 @@ use DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Faker\Factory as Faker;
 
 use Paulodiff\RainbowTableIndex\RainbowTableIndexEncrypter;
@@ -25,6 +27,18 @@ class RainbowTableIndexCheckConfigCommand extends Command
 
         
         Log::channel('stderr')->info('CheckConfig:', [] );
+
+        Log::channel('stderr')->info('CheckConfig:', ['Checking Laravel Crypt and Hash function'] );
+        try {
+            $h1 = Hash::make('test');
+            $cr = Crypt::encryptString('test');
+            Log::channel('stderr')->info('Hash:', [$h1] );
+            Log::channel('stderr')->info('Crypt:', [$cr] );
+        } catch (\Exception $e) {
+            Log::channel('stderr')->info('CheckConfig:', ['Please check hash, encrypt Laravel config'] );
+            // die("Could not use PHP SODIUM.  Please check your PHP.INI for SODIUM configuration" . $e );
+            // $this->assertTrue(false);
+        }
 
 
         Log::channel('stderr')->info('CheckConfig:', ['Checking .env Rainbow parameter']);
