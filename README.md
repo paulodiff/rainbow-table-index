@@ -12,6 +12,9 @@
     <a href="https://packagist.org/packages/paulodiff/rainbow-table-index">
         <img src="https://img.shields.io/packagist/v/paulodiff/rainbow-table-index.svg?style=flat-square"/>
     </a>
+    <a href="https://packagist.org/packages/paulodiff/rainbow-table-index">
+        <img src="https://img.shields.io/packagist/dt/paulodiff/rainbow-table-index.svg?style=flat-square"/>
+    </a>
 </p>
 
 ## Introduction
