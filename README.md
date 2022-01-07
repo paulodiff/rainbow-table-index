@@ -133,15 +133,46 @@ The library can be used in contexts where it is necessary to guarantee the priva
 - php Sodium
 - Redis (Coming soon)
 
-### Example - Demo - Running Tests
+### Setup
 
-Create a Laravel Application
+#### Create a Laravel Application
 
 ```bash
 composer create-project laravel/laravel rainbow-table-index-app
 cd rainbow-table-index-app
 composer require paulodiff/rainbow-table-index
+php artisan vendor:publish --provider="Paulodiff\RainbowTableIndex\RainbowTableIndexServiceProvider" --tag="config"
 ```
+
+#### Generate encryption key
+
+```bash
+php artisan RainbowTableIndex:keyGenerator
+```
+and copy values in .env file.
+
+### Check config ....
+
+- .env configuration
+- php SODIUM ? (TO REMOVE ???? Laravel/Crypto)
+
+```bash
+php artisan RainbowTableIndex:checkConfig
+```
+
+If all is ok! you are ready to go!
+
+### Create a working demo
+
+#### Configure mysql
+
+#### Copy model
+
+#### Run dbseed
+
+#### Run dbStats
+
+
 
 https://github.com/paulodiff/rainbow-table-index.git
 
@@ -168,6 +199,9 @@ RAINBOW_TABLE_INDEX_ENCRYPT=true
 ```
 
 php artisan RainbowTableIndex:checkConfig
+
+
+### demo
 
 
 php artisan RainbowTableIndex:demoSeed
