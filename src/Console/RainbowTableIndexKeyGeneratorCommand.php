@@ -5,7 +5,7 @@ namespace Paulodiff\RainbowTableIndex\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-class KeyGenerator extends Command
+class RainbowTableIndexKeyGeneratorCommand extends Command
 {
     protected $signature = 'RainbowTableIndex:keyGenerator';
 
@@ -15,9 +15,18 @@ class KeyGenerator extends Command
     {
         $this->info('Key generator ...');
 
-        $this->info('Publishing configuration...');
-        $this->info('RAINBOW_TABLE_INDEX_KEY=' . sodium_bin2base64( $key , SODIUM_BASE64_VARIANT_ORIGINAL ), [] );
-        $this->info('RAINBOW_TABLE_INDEX_NONCE=' . sodium_bin2base64( $nonce , SODIUM_BASE64_VARIANT_ORIGINAL ), [] );
+        // $this->info('Publishing configuration...');
+        $key = sodium_crypto_secretbox_keygen();
+        $this->info($key);
+        $this->info(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+
+
+        // dd(sodium_bin2base64( $key , SODIUM_BASE64_VARIANT_ORIGINAL ));
+        $kg = sodium_bin2base64( $key , SODIUM_BASE64_VARIANT_ORIGINAL );
+        $this->info('RAINBOW_TABLE_INDEX_KEY=' . $kg );
+        $ng = sodium_bin2base64( $nonce , SODIUM_BASE64_VARIANT_ORIGINAL );
+        $this->info('RAINBOW_TABLE_INDEX_NONCE=' . $ng );
         $this->info('Copy and paste this values in .env file');    
             
 

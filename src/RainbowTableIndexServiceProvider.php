@@ -2,6 +2,7 @@
 namespace Paulodiff\RainbowTableIndex;
 
 use Illuminate\Support\ServiceProvider;
+use Paulodiff\RainbowTableIndex\Console\RainbowTableIndexKeyGeneratorCommand;
 
 class RainbowTableIndexServiceProvider extends ServiceProvider
 {
@@ -19,9 +20,17 @@ class RainbowTableIndexServiceProvider extends ServiceProvider
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if ($this->app->runningInConsole()) {
+
             $this->publishes([
                 __DIR__.'/../config/rainbowtableindex.php' => config_path('rainbowtableindex.php'),
             ], 'config');
+
+
+            if ($this->app->runningInConsole()) {
+                $this->commands([
+                    RainbowTableIndexKeyGeneratorCommand::class,
+                ]);
+            }
 
             // Publishing the views.
             /*$this->publishes([
