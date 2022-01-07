@@ -139,6 +139,8 @@ Copy the following files in folder
 
 Publish config  ... TODO
 
+copy model
+
 
 ```bash
 
@@ -173,14 +175,20 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
+### Using test
+
+RainbowTableIndex01CheckConfigTest.php
+
+- 
+
 Run Check configuration for the first time
 
 php artisan db:seed --class=RainbowCheckConfig
 
-- check database connection
-- create table for test (Post, Comments, Categories)
-- check PHP SODIUM
 - check config Rainbow security values
+- check PHP SODIUM
+- check database connection
+- create table for test (Author, Post, Comments, Categories)
 - create a sample Rainbow Index
 
 set to .env
@@ -194,6 +202,13 @@ php artisan optimize
 // re check configuration with until ALL OK!
 php artisan db:seed --class=RainbowCheckConfig
 
+RainbowTableIndex02SeedDataTest.php
+
+Edit if number of seeds. ...
+    // -------------------- TO CHANGE ---------------------------------------
+    public $NUM_OF_AUTHORS_TO_CREATE = 1000;
+    public $NUM_OF_POSTS_TO_CREATE = 2;
+    // -------------------- TO CHANGE ---------------------------------------
 
 All ok! Installation and configuration is complete!
 

@@ -11,10 +11,10 @@ class Author extends Model
     use HasFactory;
     use RainbowTableIndexTrait;
 
+    // name, name_enc, card_number, card_number_enc, address, address_enc, role, role_enc
+
     public static $rainbowTableIndexConfig = [
-    //    'title_enc' => 'full',
-    //    'primaryKey' => 'id',
-    //    'table' => 'posts',
+  
 
         'table' => [
             'primaryKey' => 'id',
@@ -56,15 +56,11 @@ class Author extends Model
 
     ];
 
-    public function comments()
+    public function posts()
     {
         // return $this->hasMany(Comment::class)->whereNull('parent_id');
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Post::class);
     }
 
-    public function category()
-    {
-        return $this->hasOne(Category::class,'cat_id', 'category_id');
-    }
 
 }

@@ -11,6 +11,8 @@ class Post extends Model
     use HasFactory;
     use RainbowTableIndexTrait;
 
+    // title, title_enc, author_id
+
     public static $rainbowTableIndexConfig = [
 
         'table' => [
