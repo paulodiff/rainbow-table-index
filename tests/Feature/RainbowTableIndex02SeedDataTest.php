@@ -21,25 +21,20 @@ class RainbowTableIndex02SeedDataTest extends TestCase
 {
 
     // -------------------- TO CHANGE ---------------------------------------
-    public $NUM_OF_AUTHORS_TO_CREATE = 100;
+    public $NUM_OF_AUTHORS_TO_CREATE = 1000;
     public $NUM_OF_POSTS_TO_CREATE = 2;
-    public $NUM_OF_COMMENTS_TO_CREATE = 5;
     // -------------------- TO CHANGE ---------------------------------------
 
     public function test_seed_data()
     {
 
         $numOfPosts = $this->NUM_OF_POSTS_TO_CREATE;
-        $numOfComments = $this->NUM_OF_COMMENTS_TO_CREATE;
         $numOfAuthors = $this->NUM_OF_AUTHORS_TO_CREATE;
 
         Log::channel('stderr')->info('SeedData:', [
             'start seeding ....',
             'Posts : ' . $this->NUM_OF_POSTS_TO_CREATE,
-            'Comments : ' . $this->NUM_OF_COMMENTS_TO_CREATE,
-            'Authors : ' . $this->NUM_OF_AUTHORS_TO_CREATE,
-            'Categories : 8',
-
+            'Authors : ' . $this->NUM_OF_AUTHORS_TO_CREATE
         ]);
         $faker = Faker::create('SeedData');
 
@@ -110,49 +105,12 @@ class RainbowTableIndex02SeedDataTest extends TestCase
               $q->author_id = $p->id;
               $q->save();
               Log::channel('stderr')->info('SeedData:' . $j . '#' . $numOfPosts .']Post Added!:', [$q->toArray()]);
-
-
             }
-            // ----------
-
-
+            
         }
-
-
-
-/*
-
-        for($i=0;$i<$numOfPosts;$i++)
-        {
-
-            $p = new Post();
-            $p->title = strtoupper($faker->text(30));
-            $p->title_enc = $p->title;
-            $p->category_id = $faker->randomElement([1,2,3,4,5,6,7]);
-            $p->save();
-
-            Log::channel('stderr')->info($i . '#' . $numOfPosts .']PostCommentCategorySeeder:Post Added!:', [$p->toArray()]);
-
-            for($j=0;$j<$numOfComments;$j++)
-            {
-                $c = new Comment();
-                $c->post_id = $p->id;
-                $c->body = strtoupper($faker->text(30));
-                $c->body_enc = $c->body;
-                $c->save();
-
-                Log::channel('stderr')->info('PostCommentCategorySeeder:Comment to Post Added!:', [$c->toArray()]);
-
-            }
-
-        }
-*/
 
         Log::channel('stderr')->info('SeedData finished!:', []);
         $this->assertTrue(true);
 
-
     }
-
-
 }

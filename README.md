@@ -147,9 +147,19 @@ https://github.com/paulodiff/rainbow-table-index.git
 
 Copy the following files in folder
 
-Publish config  ... TODO
+ - Publish config  ... TODO
 
-copy model
+#### create model Author
+```bash
+composer create-project laravel/laravel rainbow-table-index-app
+cd rainbow-table-index-app
+composer require paulodiff/rainbow-table-index
+
+// publishing
+php artisan vendor:publish --provider="Paulodiff\RainbowTableIndex\RainbowTableIndexServiceProvider" --tag="config"
+
+
+```
 
 
 ```bash
@@ -412,11 +422,21 @@ $r2 = Author::rebuildFullRainbowIndex();
 
 # Stats / Performance and dimensions
 
+Performance system characterirtcs
+
+- I3 / 16gb
+- Windows 10 / XAMPP
+- 1000 Authors
+- 4000 Posts
+
+
 Access time to an instance is different.
 My test:
 - 1000 insta
 - Index dimension
 - Time access.
+ù
+[2022-01-07 12:25:55] testing.INFO: CRUD:TOTAL TIMING: [["name_enc-2613#2613-time (enc,flat) : . [16.161010447761,2.5544727133563]","address_enc-1408#1408-time (enc,flat) : . [10.007975923295,2.5428640625]","card_number_enc-9100#9100-time (enc,flat) : . [43.496440604396,2.1048867032967]","role_enc-5#5-time (enc,flat) : . [5.10922,5.35346]"]]
 
 It is possible to calculate the number of rows of an index for each data to be indexed ($w is token length and $s is a string to tokenize)
 

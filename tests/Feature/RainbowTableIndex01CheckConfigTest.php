@@ -27,6 +27,44 @@ class RainbowTableIndex01CheckConfigTest extends TestCase
 
         Log::channel('stderr')->info('CheckConfig:', [] );
 
+
+        Log::channel('stderr')->info('CheckConfig:', ['Checking .env Rainbow parameter']);
+        if (    
+            ( config('rainbowtableindex.key')     !==  null) && 
+            ( config('rainbowtableindex.nonce')   !==  null) &&
+            ( config('rainbowtableindex.encrypt') !==  null ) 
+            ) {
+                 // $h1 = RainbowTableIndexEncrypter::hash($test);
+            Log::channel('stderr')->info('CheckConfig:', [
+                'Environment vars OK!',
+                config('rainbowtableindex.key'),
+                config('rainbowtableindex.nonce'),
+                config('rainbowtableindex.encrypt')
+            ] );
+            // $h2 = RainbowTableIndexEncrypter::short_hash($test);
+            // Log::channel('stderr')->info('Short_Hash("test"):', [$h2] );
+        } else {
+            Log::channel('stderr')->info('CheckConfig:', ['!ERROR! .env parameters NOT FOUND, check config/rainbowtableindex.php configuration, add this following values to .env and run '] );
+            $key = sodium_crypto_secretbox_keygen();
+            $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+            // return  sodium_base642bin(config('rainbowtable.key') , SODIUM_BASE64_VARIANT_ORIGINAL);
+            Log::channel('stderr')->info('RAINBOW_TABLE_INDEX_KEY=' . sodium_bin2base64( $key , SODIUM_BASE64_VARIANT_ORIGINAL ), [] );
+            Log::channel('stderr')->info('RAINBOW_TABLE_INDEX_NONCE=' . sodium_bin2base64( $nonce , SODIUM_BASE64_VARIANT_ORIGINAL ), [] );
+            Log::channel('stderr')->info('RAINBOW_TABLE_INDEX_ENCRYPT=true', ['false only for debugging purpose'] );
+            $this->assertTrue(false);
+        }
+
+        Log::channel('stderr')->info('CheckConfig:', ['Checking PHP SODIUM'] );
+        try {
+            $out = sodium_crypto_generichash('CHECK SODIUM');
+            Log::channel('stderr')->info('CheckConfig:', ['SODIUM OK'] );
+        } catch (\Exception $e) {
+            Log::channel('stderr')->info('CheckConfig:', ['Could not use PHP SODIUM.  Please check your PHP.INI for SODIUM configuration'] );
+            // die("Could not use PHP SODIUM.  Please check your PHP.INI for SODIUM configuration" . $e );
+            $this->assertTrue(false);
+        }
+
+
         // Test database connection
         Log::channel('stderr')->info('CheckConfig:', ['Checking db connection'] );
         try {
@@ -36,7 +74,6 @@ class RainbowTableIndex01CheckConfigTest extends TestCase
             Log::channel('stderr')->error('CheckConfig:', ['DB connection ERROR!', $e] );
             $this->assertTrue(false);
         }
-
 
 
         Log::channel('stderr')->info('CheckConfig:', ['Creating table authors ...'] );
@@ -78,50 +115,6 @@ class RainbowTableIndex01CheckConfigTest extends TestCase
             Log::channel('stderr')->info('CheckConfig:', ['table posts already exits'] );
         }
 
-
-        Log::channel('stderr')->info('CheckConfig:', ['Checking PHP SODIUM'] );
-        try {
-            $out = sodium_crypto_generichash('CHECK SODIUM');
-            Log::channel('stderr')->info('CheckConfig:', ['SODIUM OK'] );
-        } catch (\Exception $e) {
-            Log::channel('stderr')->info('CheckConfig:', ['Could not use PHP SODIUM.  Please check your PHP.INI for SODIUM configuration'] );
-            // die("Could not use PHP SODIUM.  Please check your PHP.INI for SODIUM configuration" . $e );
-            $this->assertTrue(false);
-        }
-
-        Log::channel('stderr')->info('CheckConfig:', ['Checking .env Rainbow parameter',
-      
-                
-        ] );
-
-        if (    
-            ( config('rainbowtableindex.key')     !==  null) && 
-            ( config('rainbowtableindex.nonce')   !==  null) &&
-            ( config('rainbowtableindex.encrypt') !==  null ) 
-            ) {
-                 // $h1 = RainbowTableIndexEncrypter::hash($test);
-            Log::channel('stderr')->info('CheckConfig:', [
-                'Environment vars OK!',
-                config('rainbowtableindex.key'),
-                config('rainbowtableindex.nonce'),
-                config('rainbowtableindex.encrypt')
-            ] );
-            // $h2 = RainbowTableIndexEncrypter::short_hash($test);
-            // Log::channel('stderr')->info('Short_Hash("test"):', [$h2] );
-
-        } else {
-            
-            Log::channel('stderr')->info('CheckConfig:', ['!ERROR! .env parameters NOT FOUND, check config/rainbowtableindex.php configuration, add this following values to .env and run '] );
-            $key = sodium_crypto_secretbox_keygen();
-            $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
-
-            // return  sodium_base642bin(config('rainbowtable.key') , SODIUM_BASE64_VARIANT_ORIGINAL);
-            Log::channel('stderr')->info('RAINBOW_TABLE_INDEX_KEY=' . sodium_bin2base64( $key , SODIUM_BASE64_VARIANT_ORIGINAL ), [] );
-            Log::channel('stderr')->info('RAINBOW_TABLE_INDEX_NONCE=' . sodium_bin2base64( $nonce , SODIUM_BASE64_VARIANT_ORIGINAL ), [] );
-            Log::channel('stderr')->info('RAINBOW_TABLE_INDEX_ENCRYPT=true', ['false only for debugging purpose'] );
-
-            $this->assertTrue(false);
-        }
 
         Log::channel('stderr')->info('CheckConfig:', ['Checking RainbowTableService'] );
         try {

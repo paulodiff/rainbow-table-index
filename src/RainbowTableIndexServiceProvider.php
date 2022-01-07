@@ -20,7 +20,7 @@ class RainbowTableIndexServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('laravel-package-demo.php'),
+                __DIR__.'/../config/config.php' => config_path('rainbowtableindex.php'),
             ], 'config');
 
             // Publishing the views.
