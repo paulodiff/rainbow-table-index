@@ -20,7 +20,7 @@ class RainbowTableIndexServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('rainbowtableindex.php'),
+                __DIR__.'/../config/rainbowtableindex.php' => config_path('rainbowtableindex.php'),
             ], 'config');
 
             // Publishing the views.
@@ -49,7 +49,7 @@ class RainbowTableIndexServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'rainbox-table-index');
+        $this->mergeConfigFrom(__DIR__.'/../config/rainbowtableindex.php', 'rainbox-table-index');
 
         // Register the main class to use with the facade
         $this->app->singleton('rainbox-table-index', function () {
