@@ -3,7 +3,17 @@
 # 🚨 DO NOT USE IN PRODUCTION! 🚨
 
 <p align="center">
-    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Built_for-Laravel-green.svg?style=flat-square"></a>
+    <a href="https://laravel.com">
+    <img src="https://img.shields.io/badge/Built_for-Laravel-green.svg?style=flat-square">
+    </a>
+
+    <a href="https://packagist.org/packages/paulodiff/rainbow-table-index">
+        <img src="https://img.shields.io/github/license/paulodiff/rainbow-table-index.svg?style=flat-square"/>
+    </a>
+
+    <a href="https://packagist.org/packages/paulodiff/rainbow-table-index">
+        <img src="https://img.shields.io/packagist/v/paulodiff/rainbow-table-index.svg?style=flat-square"/>
+    </a>
    
 </p>
 
