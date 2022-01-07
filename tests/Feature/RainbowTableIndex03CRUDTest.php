@@ -1,6 +1,7 @@
 <?php
 
 // php artisan test --testsuite=Feature --filter=RainbowTableIndex03CRUDTest --stop-on-failure
+// .\vendor\bin\phpunit --filter test_search_verify tests\Feature\RainbowTableIndex03CRUDTest.php
 
 namespace Paulodiff\RainbowTableIndex\Tests\Feature;
 
@@ -26,6 +27,7 @@ class RainbowTableIndex03CRUDTest extends TestCase
     use RainbowTableIndexTrait;
     // -------------------- TO CHANGE ---------------------------------------
     public $NUM_OF_SEARCH = 100;
+    public $NUM_OF_ITEMS = 100;
     // -------------------- TO CHANGE ---------------------------------------
     public $faker;
 
@@ -55,6 +57,11 @@ class RainbowTableIndex03CRUDTest extends TestCase
         $DATA_ENCRYPTED_FULL_TEXT = [];
         $DATA_ENCRYPTED = [];
 
+        $TIMING = [];
+
+        // generate data for test
+        // read 100 data and generate data to search...
+
         foreach($a::$rainbowTableIndexConfig['fields'] as $item)
         {
             Log::channel('stderr')->info('CRUD:item', [$item] );
@@ -63,7 +70,7 @@ class RainbowTableIndex03CRUDTest extends TestCase
             {
                 $DATA_ENCRYPTED_FULL_TEXT[$item['fName']] = [];
                 $fName_flat = substr($item['fName'], 0, -4);
-                $ids = $a::select($fName_flat)->limit(100)->get()->toArray();
+                $ids = $a::select($fName_flat)->limit($this->NUM_OF_ITEMS)->get()->toArray();
                 Log::channel('stderr')->info('CRUD:ids------->', [$ids] );
 
                 foreach($ids as $o)
@@ -77,7 +84,6 @@ class RainbowTableIndex03CRUDTest extends TestCase
 
                     $data = self::rtiSanitize($fValue, $fSafeChars, $fTransform);
                     $keyList = self::rtiTokenize($data, $fMinTokenLen);
-                    Log::channel('stderr')->info('CRUD:@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', [] );
                     Log::channel('stderr')->info('CRUD:keyList------->', [$keyList] );
 
                     $DATA_ENCRYPTED_FULL_TEXT[$item['fName']] = array_merge($DATA_ENCRYPTED_FULL_TEXT[$item['fName']] , $keyList);
@@ -98,7 +104,7 @@ class RainbowTableIndex03CRUDTest extends TestCase
 
         }
 
-        // RUN SEARCH ON DATA_ENCRYPTED_FULL_TEXT !!!
+        // RUN SEARCH ON DATA_ENCRYPTED_FULL_TEXT ....
 
         foreach($DATA_ENCRYPTED_FULL_TEXT as $k=>$v)
         {
@@ -106,11 +112,15 @@ class RainbowTableIndex03CRUDTest extends TestCase
             $fName = substr($fName_enc, 0, -4);
             // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED_FULL_TEXT------->', [$fName, $fName_enc] );
 
+            $totalItem = count($DATA_ENCRYPTED_FULL_TEXT[$k]);
+            $curItem = 0;
+            $t1=0; $t2=0;
+            
             foreach ($DATA_ENCRYPTED_FULL_TEXT[$k] as $v)
             {
-
+                $curItem++;
                 // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED_FULL_TEXT------->', [$k, $v] );
-                $t1=0; $t2=0;
+
                 $token_2_search = $v;
                 $start1=hrtime(true);
                 $arr1 = $a::select('id')->where($fName_enc, 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
@@ -127,33 +137,38 @@ class RainbowTableIndex03CRUDTest extends TestCase
 
                 // Verify results ...
                 if ( $arr1 === $arr2) {
-                    Log::channel('stderr')->info('CRUD:ENC_FULL@' . $k .']' . $token_2_search . '] same result for :', [$token_2_search, $eta1, $eta2, count($arr1), count($arr2)] );
+                    Log::channel('stderr')->info('CRUD:' . $curItem . "#" . $totalItem . '-' . $k .']' . $token_2_search . '] same result for :', [$token_2_search, $eta1, $eta2, count($arr1), count($arr2)] );
                     $t1 += $eta1; $t2 += $eta2;
                 } else {
-                    Log::error('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ :', [count($arr1), count($arr2)] );
+                    Log::error('^ERROR^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ :', [count($arr1), count($arr2)] );
                     Log::error('Check mismatch :', [$fName, $token_2_search] );
                     Log::error('arr1 enc  :', [$arr1] );
                     Log::error('arr2 flat :', [$arr2] );
                     exit(9999);
                 }
-
             }
-
+            // echo $eta/1e+6; //nanoseconds to milliseconds
+            $t1 = $t1 / $totalItem / 1e+6;
+            $t2 = $t2 / $totalItem / 1e+6;
+            Log::channel('stderr')->info('CRUD:TOTAL' . $curItem . "#" . $totalItem . '-' . $k .'] time (enc,flat) :', [$t1, $t2] );
+            $TIMING[] = $k . '-' . $curItem . "#" . $totalItem . '-' . 'time (enc,flat) : . [' . $t1 . ',' . $t2 . ']';
         }
 
         // RUN SEARCH ON DATA_ENCRYPTED_FULL_TEXT !!!
 
         foreach($DATA_ENCRYPTED as $k=>$v)
         {
+            $totalItem = count($DATA_ENCRYPTED[$k]);
+            $curItem = 0;
             $fName_enc = $k;
             $fName = substr($fName_enc, 0, -4);
             // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$fName, $fName_enc] );
-
+            $t1=0; $t2=0;
             foreach ($DATA_ENCRYPTED[$k] as $v)
             {
-
+                $curItem++;
                 // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$k, $v] );
-                $t1=0; $t2=0;
+
                 $token_2_search = $v;
                 $start1=hrtime(true);
                 $arr1 = $a::select('id')->where($fName_enc,  $token_2_search )->get()->toArray();
@@ -170,7 +185,7 @@ class RainbowTableIndex03CRUDTest extends TestCase
 
                 // Verify results ...
                 if ( $arr1 === $arr2) {
-                    Log::channel('stderr')->info('CRUD:ENC@' . $k .':'  . $token_2_search . '] same result for :', [$token_2_search, $eta1, $eta2, count($arr1), count($arr2)] );
+                    Log::channel('stderr')->info('CRUD:' . $curItem . "#" . $totalItem . '-'  . $k .':'  . $token_2_search . '] same result for :', [$token_2_search, $eta1, $eta2, count($arr1), count($arr2)] );
                     $t1 += $eta1; $t2 += $eta2;
                 } else {
                     Log::error('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ :', [count($arr1), count($arr2)] );
@@ -181,8 +196,14 @@ class RainbowTableIndex03CRUDTest extends TestCase
                 }
 
             }
+            $t1 = $t1 / $totalItem / 1e+6;
+            $t2 = $t2 / $totalItem / 1e+6;
+            Log::channel('stderr')->info('CRUD:TOTAL' . $curItem . "#" . $totalItem . '-' . $k .']' . $token_2_search . '] time :', [$t1, $t2] );
+            $TIMING[] = $k . '-' . $curItem . "#" . $totalItem . '-' . 'time (enc,flat) : . [' . $t1 . ',' . $t2 . ']';
 
         }
+
+        Log::channel('stderr')->info('CRUD:TOTAL TIMING:', [$TIMING] );
 
         $this->assertTrue(true);
 
@@ -270,155 +291,3 @@ class RainbowTableIndex03CRUDTest extends TestCase
 
 
 
-/*
-// Author TEST SEARCH on field name, name_enc
-for($i=0;$i<$numOftests;$i++)
-{
-    $t1=0; $t2=0;
-    $token_2_search = $this->getText2Search();
-    $token_2_search = str_replace(['.'], '', $token_2_search);
-    // Log::channel('stderr')->info('CommentTest:', [$token_2_search]);
-
-
-    $token_2_search = 'IAN';
-
-    // Full text search in encrypted field
-    $start1=hrtime(true);
-    $arr1 = Author::select('id')->where('name_enc', 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
-    $end1=hrtime(true);
-    $eta1=$end1-$start1;
-    // Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
-
-    // Full text search in flat field
-    $start2=hrtime(true);
-    $arr2 = Author::select('id')->where('name', 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
-    // Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
-    $end2=hrtime(true);
-    $eta2=$end2-$start2;
-
-    // Verify results ...
-    if ( $arr1 === $arr2) {
-        Log::channel('stderr')->info('Comment ' . $i . ' - ' . $numOftests . 'same result for :', [$token_2_search, $eta1, $eta2, count($arr1), count($arr2)] );
-        $t1 += $eta1; $t2 += $eta2;
-    } else {
-        Log::error('Check mismatch :', [$token_2_search] );
-        exit(9999);
-    }
-}
-*/
-
-
-
-
-
-/*
-
-$ps = Post::with(['category', 'comments'])->take(3)->get();
-// Log::channel('stderr')->info('PostTest:JOIN', [$p]);
-foreach($ps as $p)
-{
-    // echo '>>>' . $p->id .'#'. $p->title . '@' .  $p->category->cat_id . "@" . $p->category->description . "\n\n";
-    // print_r($p->comments);
-    // echo '--------------------------------------------------------------------------------------------------\n';
-    // print_r($p->toArray());
-    Log::channel('stderr')->info(json_encode($p->toArray()), [] );
-    // print_r($p->category->toArray());
-    // print_r($p->comments->toArray());
-}
-
-$this->faker = Faker::create('PostCommentTest');
-*/
-
-/*
-
-
-
-
-  // TEST post title
-  for($i=0;$i<$numOftests;$i++)
-  {
-      $t1=0; $t2=0;
-      $token_2_search = $this->getText2Search();
-      $token_2_search = str_replace(['.'], '', $token_2_search);
-      // Log::channel('stderr')->info('PostTest                   :', [$token_2_search]);
-
-      // Full text search in encrypted post.title_enc
-      $start1=hrtime(true);
-      $arr1 = Post::select('id')->where('title_enc', 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
-      $end1=hrtime(true);
-      $eta1=$end1-$start1;
-
-      // Log::channel('stderr')->info('Post result encrypted field:', [$arr1] );
-
-      // Full text search in flat post.title_enc
-      $start2=hrtime(true);
-      $arr2 = Post::select('id')->where('title', 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
-      $end2=hrtime(true);
-      $eta2=$end2-$start2;
-
-      // Log::channel('stderr')->info('Post result      flat field:', [$arr2] );
-
-      // Verify results ...
-      if ( $arr1 === $arr2) {
-          Log::channel('stderr')->info('Post ' . $i . ' - ' . $numOftests . ' search same result for :', [$token_2_search, $eta1, $eta2] );
-          $t1 += $eta1; $t2 += $eta2;
-      } else {
-          Log::error('Check mismatch :', [$token_2_search] );
-          exit(9999);
-      }
-  }
-*/
-
-
-/*
-
-  Log::channel('stderr')->info('FINAL Post time for : Rainbow time:' .  $t1/$numOftests/1e+6 . 'ms sql time:' . $t2/$numOftests/1e+6 . 'ms', [$t1, $t2, $numOftests] );
-
-  // TEST comment body
-  for($i=0;$i<$numOftests;$i++)
-  {
-      $t1=0; $t2=0;
-      $token_2_search = $this->getText2Search();
-      $token_2_search = str_replace(['.'], '', $token_2_search);
-      // Log::channel('stderr')->info('CommentTest:', [$token_2_search]);
-
-      // Full text search in encrypted field
-      $start1=hrtime(true);
-      $arr1 = Comment::select('id')->where('body_enc', 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
-      $end1=hrtime(true);
-      $eta1=$end1-$start1;
-      // Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
-
-      // Full text search in flat field
-      $start2=hrtime(true);
-      $arr2 = Comment::select('id')->where('body', 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
-      // Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
-      $end2=hrtime(true);
-      $eta2=$end2-$start2;
-
-      // Verify results ...
-      if ( $arr1 === $arr2) {
-          Log::channel('stderr')->info('Comment ' . $i . ' - ' . $numOftests . 'same result for :', [$token_2_search, $eta1, $eta2] );
-          $t1 += $eta1; $t2 += $eta2;
-      } else {
-          Log::error('Check mismatch :', [$token_2_search] );
-          exit(9999);
-      }
-  }
-  Log::channel('stderr')->info('FINAL Comment time for : Rainbow time:' .  $t1/$numOftests/1e+6 . 'ms sql time:' . $t2/$numOftests/1e+6 . 'ms', [] );
-*/
-
-
-
-
-
-  /* MAINTENANCE - rebuild index for all instances
-  Log::channel('stderr')->info('Post destroyRainbowIndex :', ['....'] );
-  Post::destroyRainbowIndex();
-  // Loop for and rebuild ....
-  Log::channel('stderr')->info('Post rebuilding FullRainbowIndex ..... ', ['....'] );
-  Post::rebuildFullRainbowIndex();
-  Log::channel('stderr')->info('Post rebuilded! FullRainbowIndex', ['OK'] );
-  */
-
-  // Log::channel('stderr')->info('ALL DATA TO TEST:', [$DATA_ENCRYPTED_FULL_TEXT, $DATA_ENCRYPTED]);
