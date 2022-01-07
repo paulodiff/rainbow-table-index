@@ -164,9 +164,18 @@ If all is ok! you are ready to go!
 
 ### Create a working demo
 
+Warning! This procedure build two table in the datbase:
+
+- authors
+- posts
+
+and seed this tables with 1000 rows of data.
+
 #### Configure mysql
 
 #### Copy model
+
+in app/models copy Author.php and Posts.php from ...
 
 #### Run dbseed
 
