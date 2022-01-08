@@ -510,5 +510,43 @@ sanitize_string
 
 # Future works
 ```
+## Realdatabase - https://dbdiagram.io/d/61d3251f3205b45b73d51c25
+
+Table player as A {
+  player_id int [pk] // auto-increment
+  player_full_name varchar
+  player_address varchar
+  player_credit varchar
+  player_phone varchar
+}
+
+Table team as B {
+  team_id int [pk]
+  team_name varchar
+  team_type_id int
+}
+
+Table team_type as C {
+  team_type_id int [pk]
+  team_type_description varchar
+  team_type_rules varchar
+}
+
+Table roster as D {
+  roster_id int [pk]
+  roster_player_id int
+  roster_team_id int
+  roster_role_id int
+  roster_amount varchar 
+}
+
+Table roles as E {
+  roles_id int [pk]
+  roles_description varchar
+  roles_fee varchar
+}
+
+
+
 
 ```
