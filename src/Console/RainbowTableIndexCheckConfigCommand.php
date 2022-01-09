@@ -30,6 +30,10 @@ class RainbowTableIndexCheckConfigCommand extends Command
 
         Log::channel('stderr')->info('CheckConfig:', ['Checking Laravel Crypt and Hash function'] );
         try {
+
+            Log::channel('stderr')->info('Encryption config:', [config('hashing.driver')] );
+            
+
             $h1 = RainbowTableIndexEncrypter::encrypt('test');
             $h2 = RainbowTableIndexEncrypter::encrypt('test');
             $h3 = RainbowTableIndexEncrypter::encrypt('test');
