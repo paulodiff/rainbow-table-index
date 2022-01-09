@@ -70,7 +70,16 @@ class RainbowTableIndexDbSeedCommand extends Command
         ]);
         $faker = Faker::create('SeedData');
 
+        if ( class_exists('\Paulodiff\RainbowTableIndex\Tests\Models\Author') )
+        {
+            $a = new \Paulodiff\RainbowTableIndex\Tests\Models\Author();
+        }
+        else
+        {
+            $a = new \App\Models\Author();
+        }
 
+/*
         try
         {
             $a = new \Paulodiff\RainbowTableIndex\Tests\Models\Author();
@@ -79,7 +88,7 @@ class RainbowTableIndexDbSeedCommand extends Command
         {
             $a = new \App\Models\Author();
         }
-
+*/
 
         Log::channel('stderr')->info('SeedData:', ['destroy authors rainbox index... ']);
         $a::destroyRainbowIndex();
@@ -101,14 +110,15 @@ class RainbowTableIndexDbSeedCommand extends Command
         {
             // $p = new Author();
 
-            try
+            if ( class_exists('\Paulodiff\RainbowTableIndex\Tests\Models\Author') )
             {
                 $p = new \Paulodiff\RainbowTableIndex\Tests\Models\Author();
             }
-            catch (\Exception $e)
+            else
             {
                 $p = new \App\Models\Author();
             }
+    
 
 
             $p->name = strtoupper($faker->name());
