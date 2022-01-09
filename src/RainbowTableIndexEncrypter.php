@@ -31,7 +31,7 @@ class RainbowTableIndexEncrypter
         //$enc_result = Hash::make($s);
         //$encoded = base64_encode($enc_result);
         //return $encoded;
-        return hash("md5", $s);
+        return hash("sha256", $s);
     }
 
     public static function hash_md5($s)

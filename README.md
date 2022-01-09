@@ -131,7 +131,6 @@ The library can be used in contexts where it is necessary to guarantee the priva
 
 - Laravel 8
 - Mysql 
-- php Sodium (TO REMOVE!)
 - Redis (Coming soon)
 
 ### Setup
@@ -387,6 +386,11 @@ DB_DATABASE=rainbow
 DB_USERNAME=root
 DB_PASSWORD=
 ```
+## Security customization
+
+- Laravel Encrypt/Decrypt
+- Hash
+
 
 ### Using test
 
