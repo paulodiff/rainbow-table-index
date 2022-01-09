@@ -2,6 +2,7 @@
 
 # 🚨 DO NOT USE IN PRODUCTION! 🚨
 
+
 <p align="center">
     <a href="https://laravel.com">
     <img src="https://img.shields.io/badge/Built_for-Laravel-green.svg?style=flat-square">
@@ -130,7 +131,7 @@ The library can be used in contexts where it is necessary to guarantee the priva
 
 - Laravel 8
 - Mysql 
-- php Sodium
+- php Sodium (TO REMOVE!)
 - Redis (Coming soon)
 
 ### Setup
@@ -192,7 +193,9 @@ Copy the following files in folder
 #### create model Author
 ```bash
 composer create-project laravel/laravel rainbow-table-index-app
+
 cd rainbow-table-index-app
+
 composer require paulodiff/rainbow-table-index
 
 // publishing
@@ -210,13 +213,172 @@ RAINBOW_TABLE_INDEX_ENCRYPT=true
 php artisan RainbowTableIndex:checkConfig
 
 
-### demo
+### Configure and running demo and test
 
+#### Create a migration
+```bash
+php artisan make:migration create_author_post_migration
+```
 
-php artisan RainbowTableIndex:demoSeed
+edit migration file
 
+```php
 
-php artisan RainbowTableIndex:demoStats
+    public function up()
+    {
+       Schema::create('authors', function (Blueprint $table) {
+            $table->increments('id');
+            $table->text('name');
+            $table->text('name_enc'); // for test only
+            $table->text('card_number');
+            $table->text('card_number_enc'); // for test only
+            $table->text('address');
+            $table->text('address_enc'); // for test only
+            $table->text('role');
+            $table->text('role_enc'); // for test only
+            $table->timestamps();
+        });
+
+        Schema::create('posts', function (Blueprint $table) {
+             $table->increments('id');
+             $table->text('title');
+             $table->text('title_enc'); // for test only
+             $table->integer('author_id');
+             $table->timestamps();
+        });
+  
+    }
+    public function down()
+    {
+        Schema::dropIfExists('authors');
+        Schema::dropIfExists('posts');
+    }
+```
+migrate database
+
+```bash
+php migrate
+```
+
+create Author and Post model
+
+edit App/Models/Author.php
+
+```php
+<?php
+namespace Paulodiff\RainbowTableIndex\Tests\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+use  Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
+
+class Author extends Model
+{
+    use HasFactory;
+    use RainbowTableIndexTrait;
+
+    // name, name_enc, card_number, card_number_enc, address, address_enc, role, role_enc
+
+    public static $rainbowTableIndexConfig = [
+  
+
+        'table' => [
+            'primaryKey' => 'id',
+            'tableName' => 'authors',
+        ],
+        'fields' => [
+            [
+              'fName' => 'name_enc',
+              'fType' => 'ENCRYPTED_FULL_TEXT',
+              'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
+              'fTransform' => 'UPPER_CASE',
+              'fMinTokenLen' => 3,
+            ],
+            [
+                'fName' => 'address_enc',
+                'fType' => 'ENCRYPTED_FULL_TEXT',
+                'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
+                'fTransform' => 'UPPER_CASE',
+                'fMinTokenLen' => 4,
+            ],
+            [
+                'fName' => 'card_number_enc',
+                'fType' => 'ENCRYPTED_FULL_TEXT',
+                'fSafeChars' => '1234567890',
+                'fTransform' => 'NONE',
+                'fMinTokenLen' => 4,
+            ],
+            [
+                'fName' => 'role_enc',
+                'fType' => 'ENCRYPTED',
+                'fSafeChars' => ' àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.',
+                'fTransform' => 'UPPER_CASE',
+                'fMinTokenLen' => 3,
+            ],
+
+        ]
+
+    ];
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+}
+
+```
+
+edit App/Models/Post.php
+
+```php
+<?php
+namespace Paulodiff\RainbowTableIndex\Tests\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
+
+class Post extends Model
+{
+    use HasFactory;
+    use RainbowTableIndexTrait;
+
+    public static $rainbowTableIndexConfig = [
+
+        'table' => [
+            'primaryKey' => 'id',
+            'tableName' => 'posts',
+        ],
+        'fields' => [
+            [
+              'fName' => 'title_enc',
+              'fType' => 'ENCRYPTED_FULL_TEXT',
+              'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
+              'fTransform' => 'UPPER_CASE',
+              'fMinTokenLen' => 3,
+            ],
+
+        ]
+
+    ];
+}
+
+```
+
+run db seed (with 1000 rows)
+
+```bash
+php artisan RainbowTableIndex:demoSeed 1000
+```
+
+run search test and metrics (with 100 )
+
+```bash
+php artisan RainbowTableIndex:demoStats 100
+```
+
 
 
 
