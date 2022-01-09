@@ -38,7 +38,20 @@ class RainbowTableIndexDbCrudCommand extends Command
         $this->faker = Faker::create('PostCommentTest');
 
         // Author search test
-        $a = new Author();
+        // $a = new Author();
+
+        if ( class_exists('\Paulodiff\RainbowTableIndex\Tests\Models\Author') )
+        {
+            $a = new \Paulodiff\RainbowTableIndex\Tests\Models\Author();
+        }
+        else
+        {
+            $a = new \App\Models\Author();
+        }
+
+
+
+
         Log::channel('stderr')->info('CRUD:config', [$a::$rainbowTableIndexConfig]);
 
         $DATA_ENCRYPTED_FULL_TEXT = [];

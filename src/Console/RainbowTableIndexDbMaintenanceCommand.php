@@ -32,12 +32,21 @@ class RainbowTableIndexDbMaintenanceCommand extends Command
 
         $id = $this->argument('id');
 
-        $a = Author::where('id', $id)->first();
-        Log::channel('stderr')->info('Maintenance:dbMaintenance', [$a::$rainbowTableIndexConfig]);
+        if ( class_exists('\Paulodiff\RainbowTableIndex\Tests\Models\Author') )
+        {
+            $a = new \Paulodiff\RainbowTableIndex\Tests\Models\Author();
+        }
+        else
+        {
+            $a = new \App\Models\Author();
+        }
 
-        $r1 = $a->rebuildRainbowIndex();
+
+        $b = $a::where('id', $id)->first();
+        Log::channel('stderr')->info('Maintenance:dbMaintenance', [$b::$rainbowTableIndexConfig]);
+
+        $r1 = $b->rebuildRainbowIndex();
         
-
         
         Log::channel('stderr')->info('dbMaintenance finished!:', []);
         
