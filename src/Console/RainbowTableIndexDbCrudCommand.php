@@ -98,7 +98,7 @@ class RainbowTableIndexDbCrudCommand extends Command
         {
             $fName_enc = $k;
             $fName = substr($fName_enc, 0, -4);
-            // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED_FULL_TEXT------->', [$fName, $fName_enc] );
+            Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED_FULL_TEXT------->', [$fName, $fName_enc] );
 
             $totalItem = count($DATA_ENCRYPTED_FULL_TEXT[$k]);
             $curItem = 0;
@@ -107,19 +107,19 @@ class RainbowTableIndexDbCrudCommand extends Command
             foreach ($DATA_ENCRYPTED_FULL_TEXT[$k] as $v)
             {
                 $curItem++;
-                // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED_FULL_TEXT------->', [$k, $v] );
+                Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED_FULL_TEXT------->', [$k, $v] );
 
                 $token_2_search = $v;
                 $start1=hrtime(true);
                 $arr1 = $a::select('id')->where($fName_enc, 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
                 $end1=hrtime(true);
                 $eta1=$end1-$start1;
-                // Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
+                Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
 
                 // Full text search in flat field
                 $start2=hrtime(true);
                 $arr2 = $a::select('id')->where($fName, 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
-                // Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
+                Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
                 $end2=hrtime(true);
                 $eta2=$end2-$start2;
 
@@ -129,9 +129,11 @@ class RainbowTableIndexDbCrudCommand extends Command
                     $t1 += $eta1; $t2 += $eta2;
                 } else {
                     Log::error('^ERROR^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ :', [count($arr1), count($arr2)] );
-                    Log::error('Check mismatch :', [$fName, $token_2_search] );
+                    Log::error('Check mismatch :', [$fName, $fName_enc, $token_2_search] );
                     Log::error('arr1 enc  :', [$arr1] );
                     Log::error('arr2 flat :', [$arr2] );
+                    Log::channel('stderr')->info('stderr arr2 flat :', [$arr2] );
+                    Log::debug('arr2 flat :', [$arr2] );
                     exit(9999);
                 }
             }
@@ -150,24 +152,24 @@ class RainbowTableIndexDbCrudCommand extends Command
             $curItem = 0;
             $fName_enc = $k;
             $fName = substr($fName_enc, 0, -4);
-            // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$fName, $fName_enc] );
+            Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$fName, $fName_enc] );
             $t1=0; $t2=0;
             foreach ($DATA_ENCRYPTED[$k] as $v)
             {
                 $curItem++;
-                // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$k, $v] );
+                Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$fName, $fName_enc, $k, $v] );
 
                 $token_2_search = $v;
                 $start1=hrtime(true);
                 $arr1 = $a::select('id')->where($fName_enc,  $token_2_search )->get()->toArray();
                 $end1=hrtime(true);
                 $eta1=$end1-$start1;
-                // Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
+                Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
 
                 // Full text search in flat field
                 $start2=hrtime(true);
                 $arr2 = $a::select('id')->where($fName, $token_2_search)->get()->toArray();
-                // Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
+                Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
                 $end2=hrtime(true);
                 $eta2=$end2-$start2;
 

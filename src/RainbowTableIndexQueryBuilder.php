@@ -18,7 +18,7 @@ class RainbowTableIndexQueryBuilder extends Builder {
     // $q : query
     // $p : elenco campi cifrati da tenere per la cifratura
     public static function makeWithParameter($q, $p) {
-        Log::debug('RainbowQueryBuilder!makeWithParameter', [$p] );
+        Log::channel('stderr')->debug('RainbowQueryBuilder!makeWithParameter', [$p] );
         $obj = new RainbowTableIndexQueryBuilder($q); 
         $obj->enc_fields = $p;
         // other initialization
@@ -33,7 +33,7 @@ class RainbowTableIndexQueryBuilder extends Builder {
      */
     public function __construct($query)
     {
-        Log::debug('RainbowQueryBuilder! __construct', [] );
+        Log::channel('stderr')->debug('RainbowQueryBuilder! __construct', [] );
         $this->model = $this->getModel();
         parent::__construct($query);
     }
@@ -55,8 +55,8 @@ class RainbowTableIndexQueryBuilder extends Builder {
      */
     public function where($column, $operator = null, $value = null, $boolean = 'and')
     {
-        Log::debug('RainbowQueryBuilder:>>>DATI>>>>', [$column, $operator, $value, $boolean] );
-        Log::debug('RainbowQueryBuilder:>>>RAINBOW CONFIG>>>>', [$this->enc_fields] );
+        Log::channel('stderr')->debug('RainbowQueryBuilder:>>>DATI>>>>', [$column, $operator, $value, $boolean] );
+        Log::channel('stderr')->debug('RainbowQueryBuilder:>>>RAINBOW CONFIG>>>>', [$this->enc_fields] );
         /**
                 'table' => [
             'primaryKey' => 'id',
@@ -74,7 +74,7 @@ class RainbowTableIndexQueryBuilder extends Builder {
 
         if(!is_string($column)) 
         {
-            Log::debug('RainbowQueryBuilder:>>>>>>>>> NO STRING returm immediatly SIMPLE ----->', [$column, $operator] );
+            Log::channel('stderr')->debug('RainbowQueryBuilder:>>>>>>>>> NO STRING returm immediatly SIMPLE ----->', [$column, $operator] );
             return parent::where($column, $operator, $value, $boolean);
         }
 
@@ -90,32 +90,32 @@ class RainbowTableIndexQueryBuilder extends Builder {
             if($val['fName'] == $column)
             {
                 $fName = $column; $fType = $val['fType'];
-                Log::debug('RainbowQueryBuilder:>>> RAINBOW Field found in enc config!->', [$fName, $fType] );
+                Log::channel('stderr')->debug('RainbowQueryBuilder:>>> RAINBOW Field found in enc config!->', [$fName, $fType] );
             }
         }
 
         // se il campo deve utilizzare una RainbowTable
         if ( is_string($column) && ($operator == 'LIKE') && ($fName !== "") && ($fType == 'ENCRYPTED_FULL_TEXT') )
         {
-            Log::debug('RainbowQueryBuilder:>>> RAINBOW Table --GO! ENCRYPTED_FULL_TEXT ->', [$column, $operator, $tName, $primaryKey, $fType] );
+            Log::channel('stderr')->debug('RainbowQueryBuilder:>>> RAINBOW Table --GO! ENCRYPTED_FULL_TEXT ->', [$column, $operator, $tName, $primaryKey, $fType] );
             // accesso alla rainbow table per ottenere i valori da mettere nella query tramite ServiceProvider
             $tag = $tName . ":" . $column;
             $r = $this->rtService->getRT($tag, $value);
-            Log::debug('RainbowQueryBuilder:>>> RAINBOW Table --DATA!->', [$tag, $r] );
+            Log::channel('stderr')->debug('RainbowQueryBuilder:>>> RAINBOW Table --DATA!->', [$tag, $r] );
             return self::whereIn( $primaryKey , $r );
             // return self::whereRaw("CONVERT(AES_DECRYPT(FROM_BASE64(`{$filter->field}`), '{$salt}') USING utf8mb4) {$filter->operation} ? ", [$filter->value]);
         }
         elseif ( is_string($column) && ($fName !== "") && ($fType == 'ENCRYPTED') )
         {
-            Log::debug('RainbowQueryBuilder:>>>ENCRYPTED ----->', [$column, $operator, $value] );
+            Log::channel('stderr')->debug('RainbowQueryBuilder:>>>ENCRYPTED ----->', [$column, $operator, $value] );
             $operator = RainbowTableIndexEncrypter::encrypt($operator);
-            Log::debug('RainbowQueryBuilder:>>>ENCRYPTED ----->', [$column, $operator, $value] );
+            Log::channel('stderr')->debug('RainbowQueryBuilder:>>>ENCRYPTED ----->', [$column, $operator, $value] );
             return parent::where($column, $operator, $value, $boolean);
         }
         else
         // il campo può essere cifrato o meno ....
         {
-            Log::debug('RainbowQueryBuilder:>>>>>>>>> SIMPLE ----->', [$column, $operator] );
+            Log::channel('stderr')->debug('RainbowQueryBuilder:>>>>>>>>> SIMPLE ----->', [$column, $operator] );
             return parent::where($column, $operator, $value, $boolean);
         }
 

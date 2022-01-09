@@ -21,15 +21,14 @@ class Author extends Model
             'tableName' => 'authors',
         ],
         'fields' => [
+            
             [
               'fName' => 'name_enc',
               'fType' => 'ENCRYPTED_FULL_TEXT',
-              // aggiungere anche l'apice per indicizzare O'Briant Malago'
               'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
               'fTransform' => 'UPPER_CASE',
               'fMinTokenLen' => 3,
             ],
-
             [
                 'fName' => 'address_enc',
                 'fType' => 'ENCRYPTED_FULL_TEXT',
@@ -44,12 +43,13 @@ class Author extends Model
                 'fTransform' => 'NONE',
                 'fMinTokenLen' => 4,
             ],
+            
             [
                 'fName' => 'role_enc',
-                'fType' => 'ENCRYPTED',
+                'fType' => 'ENCRYPTED_FULL_TEXT',
                 'fSafeChars' => ' àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.',
                 'fTransform' => 'UPPER_CASE',
-                'fMinTokenLen' => 3,
+                'fMinTokenLen' => 0,
             ],
 
         ]
@@ -58,9 +58,6 @@ class Author extends Model
 
     public function posts()
     {
-        // return $this->hasMany(Comment::class)->whereNull('parent_id');
         return $this->hasMany(Post::class);
     }
-
-
 }

@@ -20,7 +20,7 @@ class RainbowTableIndexService
 
     public function __construct() {
         // echo "RainbowTable build mwl:" . $mwl . " sp:" . $sp .  "\n";
-        Log::debug('RainbowTableService!__construct', [] );
+        Log::channel('stderr')->debug('RainbowTableService!__construct', [] );
         $this->MIN_TOKEN_SIZE = 3;
         $this->STRING_SEPARATOR = ";";
     }
@@ -105,7 +105,7 @@ class RainbowTableIndexService
     {
       // sanitize string
       // $this->db->log("RT_add_2 start : " . $index . " " . $s, []);
-      Log::debug('RainbowTableService!setRT!:', [$tag, $s, $index] );
+      Log::channel('stderr')->debug('RainbowTableService!setRT!:', [$tag, $s, $index] );
 
       // sanitizza la stringa rimuovendo i caratteri speciali
       $s = $this->sanitize_string($s);
@@ -133,7 +133,7 @@ class RainbowTableIndexService
 
     public function setRT($tag, $s, $index)
     {
-      Log::debug('RainbowTableService!setRT*!:', [$tag, $s, $index] );
+      Log::channel('stderr')->debug('RainbowTableService!setRT*!:', [$tag, $s, $index] );
       $this->setToStorage($tag, $s, $index);
     }
 
@@ -141,10 +141,10 @@ class RainbowTableIndexService
 
     public function getRT_OLD($tag, $s)
     {
-        Log::debug('RainbowTableService!getRT!:', [$tag, $s] );
+        Log::channel('stderr')->debug('RainbowTableService!getRT!:', [$tag, $s] );
         $multiple_token_string = $this->sanitize_string($s);
         $pieces = array_filter(explode(" ", $multiple_token_string));
-        Log::debug('RainbowTableService!getRT!sanitized!:', [$pieces] );
+        Log::channel('stderr')->debug('RainbowTableService!getRT!sanitized!:', [$pieces] );
         // print_r($pieces);
 
         $p_results = [];
@@ -155,14 +155,14 @@ class RainbowTableIndexService
             $r = $this->getFromStorage($tag, $t);
             if($r)
             {
-                Log::debug("RainbowTableService!getRT! for: " . $t . " " . json_encode($r), []);
+                Log::channel('stderr')->debug("RainbowTableService!getRT! for: " . $t . " " . json_encode($r), []);
                 $p_results = array_merge($p_results, $r);
             }
 
         }
 
         $u = array_unique($p_results, SORT_STRING);
-        Log::debug("RainbowTableService!getRT!:" . $multiple_token_string . " " . json_encode($u), []);
+        Log::channel('stderr')->debug("RainbowTableService!getRT!:" . $multiple_token_string . " " . json_encode($u), []);
         // echo "RainbowTable search result for :" . $multiple_token_string . "\n";
         // print_r($u);
         return $u;
@@ -172,11 +172,11 @@ class RainbowTableIndexService
     public function getRT($tag, $s)
     {
         $s2 = str_replace("%", "", $s);
-        Log::debug('RainbowTableService!getRT*!:', [$tag, $s, $s2] );
+        Log::channel('stderr')->debug('RainbowTableService!getRT*!:', [$tag, $s, $s2] );
         $r = $this->getFromStorage($tag, $s2);
         // print_r($pieces);
         $u = array_unique($r, SORT_STRING);
-        Log::debug("RainbowTableService!getRT!:" . $s2 . " " . json_encode($u), []);
+        Log::channel('stderr')->debug("RainbowTableService!getRT!:" . $s2 . " " . json_encode($u), []);
         // echo "RainbowTable search result for :" . $multiple_token_string . "\n";
         // print_r($u);
         return $u;
@@ -185,7 +185,7 @@ class RainbowTableIndexService
     // Elimina tutte le entry/righe dell'indice relative ad una determinata coppia TAG/ID
     public function delRT($tag, $index)
     {
-        Log::debug('RainbowTableService!delRT!:', [$tag, $index] );
+        Log::channel('stderr')->debug('RainbowTableService!delRT!:', [$tag, $index] );
         $this->deleteFromStorage($tag, $index);
         return true;
     }
@@ -193,7 +193,7 @@ class RainbowTableIndexService
     // Reset index from TAG - DESTROY INDEX!
     public function resetRT($tag)
     {
-        Log::debug('RainbowTableService!resetRT!:', [$tag] );
+        Log::channel('stderr')->debug('RainbowTableService!resetRT!:', [$tag] );
         $this->resetIndexFromStorage($tag);
         return true;
     }
@@ -237,13 +237,14 @@ class RainbowTableIndexService
     // ritorna un array di valori o [] se non esiste nulla
     function getFromStorage($tag, $key)
     {
-        Log::debug('RainbowTableService!getFromStorage!', [$tag, $key] );
+        
         $tname = $this->setupStorage($tag);
 
         if (config('rainbowtableindex.encrypt'))
         {
           $key = RainbowTableIndexEncrypter::hash($key);
         }
+        Log::channel('stderr')->debug('RainbowTableService!getFromStorage!', [$tname, $tag, $key] );
 
         $r = DB::table($tname)
                     ->select('rt_value')
@@ -270,7 +271,7 @@ class RainbowTableIndexService
         {
           $key = RainbowTableIndexEncrypter::hash($key);
         }
-        Log::debug('RainbowTableService!setToStorage!', [$tag, $key, $value] );
+        Log::channel('stderr')->debug('RainbowTableService!setToStorage!', [$tname, $tag, $key, $value] );
         DB::table($tname)->insertOrIgnore([
             [
                 // 'rt_tag' => $tag,
@@ -283,7 +284,7 @@ class RainbowTableIndexService
 
     function deleteFromStorage($tag, $value)
     {
-      Log::debug('RainbowTableService!deleteFromStorage!', [$tag, $value] );
+      Log::channel('stderr')->debug('RainbowTableService!deleteFromStorage!', [$tag, $value] );
       $tname = $this->setupStorage($tag);
 
       DB::table($tname)
@@ -295,7 +296,7 @@ class RainbowTableIndexService
 
     function resetIndexFromStorage($tag)
     {
-      Log::debug('RainbowTableService!resetIndexFromStorage!', [$tag] );
+      Log::channel('stderr')->debug('RainbowTableService!resetIndexFromStorage!', [$tag] );
       $tname = $this->setupStorage($tag);
       DB::table($tname)
       // ->where('rt_tag', $tag)
@@ -305,7 +306,7 @@ class RainbowTableIndexService
     function setupStorage($tag)
     {
       $tname = $this->slugify($tag);
-      Log::debug('RainbowTableService!setupStorage!', [$tname] );
+      Log::channel('stderr')->debug('RainbowTableService!setupStorage!', [$tname] );
     
       if (config('rainbowtableindex.encrypt'))
       {
@@ -316,13 +317,13 @@ class RainbowTableIndexService
 
 
       if ( !Schema::hasTable($tname)) {
-        Log::debug('RainbowTableService!setupStorage!CREATE TABLE', [$tname] );
+        Log::channel('stderr')->debug('RainbowTableService!setupStorage!CREATE TABLE', [$tname] );
 
         Schema::create($tname, function(Blueprint $table)
         {
             // $table->increments('id');
             // $table->string('rt_tag');
-            $table->string('rt_key');
+            $table->text('rt_key');
             $table->bigInteger('rt_value');
             // $table->unique(['rt_tag','rt_key','rt_value']);
             // $table->index(['rt_tag','rt_value']);

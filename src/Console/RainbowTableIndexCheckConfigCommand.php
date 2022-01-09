@@ -30,10 +30,18 @@ class RainbowTableIndexCheckConfigCommand extends Command
 
         Log::channel('stderr')->info('CheckConfig:', ['Checking Laravel Crypt and Hash function'] );
         try {
-            $h1 = Hash::make('test');
-            $cr = Crypt::encryptString('test');
-            Log::channel('stderr')->info('Hash:', [$h1] );
-            Log::channel('stderr')->info('Crypt:', [$cr] );
+            $h1 = RainbowTableIndexEncrypter::encrypt('test');
+            $h2 = RainbowTableIndexEncrypter::encrypt('test');
+            $h3 = RainbowTableIndexEncrypter::encrypt('test');
+            $cr1 = RainbowTableIndexEncrypter::decrypt($h1);
+            $cr2 = RainbowTableIndexEncrypter::decrypt($h2);
+            $cr3 = RainbowTableIndexEncrypter::decrypt($h3);
+            Log::channel('stderr')->info('Encrypted:', [$h1] );
+            Log::channel('stderr')->info('Encrypted:', [$h2] );
+            Log::channel('stderr')->info('Encrypted:', [$h3] );
+            Log::channel('stderr')->info('Decrypted:', [$cr1] );
+            Log::channel('stderr')->info('Decrypted:', [$cr2] );
+            Log::channel('stderr')->info('Decrypted:', [$cr3] );
         } catch (\Exception $e) {
             Log::channel('stderr')->info('CheckConfig:', ['Please check hash, encrypt Laravel config'] );
             // die("Could not use PHP SODIUM.  Please check your PHP.INI for SODIUM configuration" . $e );

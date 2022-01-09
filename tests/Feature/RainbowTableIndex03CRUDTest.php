@@ -106,11 +106,13 @@ class RainbowTableIndex03CRUDTest extends TestCase
 
         // RUN SEARCH ON DATA_ENCRYPTED_FULL_TEXT ....
 
+        Log::channel('stderr')->info('CRUD:####START-SEARCH####DATA_ENCRYPTED_FULL_TEXT##', [] );
+
         foreach($DATA_ENCRYPTED_FULL_TEXT as $k=>$v)
         {
             $fName_enc = $k;
             $fName = substr($fName_enc, 0, -4);
-            // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED_FULL_TEXT------->', [$fName, $fName_enc] );
+            Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED_FULL_TEXT------->', [$fName, $fName_enc] );
 
             $totalItem = count($DATA_ENCRYPTED_FULL_TEXT[$k]);
             $curItem = 0;
@@ -119,19 +121,19 @@ class RainbowTableIndex03CRUDTest extends TestCase
             foreach ($DATA_ENCRYPTED_FULL_TEXT[$k] as $v)
             {
                 $curItem++;
-                // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED_FULL_TEXT------->', [$k, $v] );
+                Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED_FULL_TEXT------->', [$k, $v] );
 
                 $token_2_search = $v;
                 $start1=hrtime(true);
                 $arr1 = $a::select('id')->where($fName_enc, 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
                 $end1=hrtime(true);
                 $eta1=$end1-$start1;
-                // Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
+                Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
 
                 // Full text search in flat field
                 $start2=hrtime(true);
                 $arr2 = $a::select('id')->where($fName, 'LIKE', '%' . $token_2_search . '%')->get()->toArray();
-                // Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
+                Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
                 $end2=hrtime(true);
                 $eta2=$end2-$start2;
 
@@ -154,7 +156,9 @@ class RainbowTableIndex03CRUDTest extends TestCase
             $TIMING[] = $k . '-' . $curItem . "#" . $totalItem . '-' . 'time (enc,flat) : . [' . $t1 . ',' . $t2 . ']';
         }
 
-        // RUN SEARCH ON DATA_ENCRYPTED_FULL_TEXT !!!
+        // RUN SEARCH ON DATA_ENCRYPTED !!!
+
+        Log::channel('stderr')->info('CRUD:####START-SEARCH####DATA_ENCRYPTED##', [] );
 
         foreach($DATA_ENCRYPTED as $k=>$v)
         {
@@ -162,24 +166,24 @@ class RainbowTableIndex03CRUDTest extends TestCase
             $curItem = 0;
             $fName_enc = $k;
             $fName = substr($fName_enc, 0, -4);
-            // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$fName, $fName_enc] );
+            Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$fName, $fName_enc] );
             $t1=0; $t2=0;
             foreach ($DATA_ENCRYPTED[$k] as $v)
             {
                 $curItem++;
-                // Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$k, $v] );
+                Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$k, $v] );
 
                 $token_2_search = $v;
                 $start1=hrtime(true);
                 $arr1 = $a::select('id')->where($fName_enc,  $token_2_search )->get()->toArray();
                 $end1=hrtime(true);
                 $eta1=$end1-$start1;
-                // Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
+                Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
 
                 // Full text search in flat field
                 $start2=hrtime(true);
                 $arr2 = $a::select('id')->where($fName, $token_2_search)->get()->toArray();
-                // Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
+                Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
                 $end2=hrtime(true);
                 $eta2=$end2-$start2;
 

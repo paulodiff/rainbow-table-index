@@ -1,4 +1,5 @@
-
+igienepubblica.rn@auslromagna.it
+dipsan.rn@auslromagna.it
 
 
 // https://github.com/austinheap/laravel-database-encryption/blob/master/tests/TestCase.php

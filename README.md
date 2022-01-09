@@ -270,15 +270,12 @@ namespace Paulodiff\RainbowTableIndex\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 use  Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
 
 class Author extends Model
 {
     use HasFactory;
     use RainbowTableIndexTrait;
-
-    // name, name_enc, card_number, card_number_enc, address, address_enc, role, role_enc
 
     public static $rainbowTableIndexConfig = [
   
@@ -337,7 +334,6 @@ namespace Paulodiff\RainbowTableIndex\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
 
 class Post extends Model
@@ -370,41 +366,17 @@ class Post extends Model
 run db seed (with 1000 rows)
 
 ```bash
-php artisan RainbowTableIndex:demoSeed 1000
+php artisan RainbowTableIndex:dbSeed 1000
 ```
 
 run search test and metrics (with 100 )
 
 ```bash
-php artisan RainbowTableIndex:demoStats 100
+php artisan RainbowTableIndex:dbCrud 100
 ```
 
 
 
-
-
-```bash
-
-TO REVIEW!!!! WORK IN PROGRESS ....
-
-copy rainbowtable.php -> rainbow-table-index\config
-
-create folder rainbow-table-index\app\RainbowTable
-copy RainbowTrait.php -> rainbow-table-index\app\RainbowTable
-copy RainbowQueryBuilder.php -> rainbow-table-index\app\RainbowTable
-copy Encrypter.php -> rainbow-table-index\app\RainbowTable
-
-copy Post.php -> rainbow-table-index\app\Models
-copy Category.php -> rainbow-table-index\app\Models
-copy Comment.php -> rainbow-table-index\app\Models
-
-copy PostCommentCategorySeeder.php -> rainbow-table-index\database\seeders
-copy PostCommentCategoryTest.php -> rainbow-table-index\database\seeders
-copy RainbowCheckConfig.php -> rainbow-table-index\database\seeders
-
-create folder rainbow-table-index\app\Services
-copy RainbowTableService.php in rainbow-table-index\app\Services
-```
 Create a dabase named: **rainbow**  and configure mysql in .env 
 
 ```bash

@@ -2,11 +2,45 @@
 namespace Paulodiff\RainbowTableIndex;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
+
+// $h1 = Hash::make('test');
+// $cr = Crypt::encryptString('test');
+// $cr = Crypt::decryptString('test');
 
 class RainbowTableIndexEncrypter
 {
 
     public static function encrypt($s)
+    {
+        $enc_result = Crypt::encryptString($s);
+        $encoded = base64_encode($enc_result);
+        return $encoded;
+    }
+
+    public static function decrypt($s)
+    {
+        $decoded = base64_decode($s);
+        $o = Crypt::decryptString($decoded);
+        return $o;
+    }
+
+    public static function hash($s)
+    {
+        //$enc_result = Hash::make($s);
+        //$encoded = base64_encode($enc_result);
+        //return $encoded;
+        return hash("md5", $s);
+    }
+
+    public static function hash_md5($s)
+    {
+        return hash("md5", $s);
+    }
+
+    /*
+    public static function encrypt_sodium($s)
     {
         // Log::debug('Encrypter:encrypt ', [] );
         $k = self::getKey();
@@ -18,7 +52,7 @@ class RainbowTableIndexEncrypter
         return $encoded;
     }
 
-    public static function decrypt($s)
+    public static function decrypt_sodium($s)
     {
         // Log::debug('Encrypter:decrypt ', [] );
         $k = self::getKey();
@@ -34,15 +68,12 @@ class RainbowTableIndexEncrypter
         return $o;
     }
 
-    public static function hash($s)
+    public static function hash_sodium($s)
     {
         return sodium_bin2hex(sodium_crypto_generichash($s));
     }
 
-    public static function hash_md5($s)
-    {
-        return hash("md5", $s);
-    }
+  
 
     public static function short_hash($s)
     {
@@ -62,7 +93,7 @@ class RainbowTableIndexEncrypter
         // Log::debug('Encrypter:getNonce ... from config', [$nonce] );
         return  sodium_base642bin(config('rainbowtableindex.nonce') , SODIUM_BASE64_VARIANT_ORIGINAL);
     }
-
+    */
 
 
 }

@@ -22,7 +22,7 @@ trait RainbowTableIndexTrait
     {
       $validator = Validator::make(self::$rainbowTableIndexConfig, self::$configFormat);
 
-      Log::debug('RainbowTrait!config checkConfig!', [$validator] );
+      Log::channel('stderr')->debug('RainbowTrait!config checkConfig!', [$validator] );
 
       if ($validator->fails()) {
         Log::error('RainbowTrait!config error!', [$validator->fails()] );
@@ -36,7 +36,7 @@ trait RainbowTableIndexTrait
 
     public function generateSlug($string)
     {
-      Log::debug('SluggableTrait!generateSlug!', [$string] );
+      Log::channel('stderr')->debug('SluggableTrait!generateSlug!', [$string] );
       return strtolower(preg_replace(
         ['/[^\w\s]+/', '/\s+/'],
         ['', '-'],
@@ -46,8 +46,8 @@ trait RainbowTableIndexTrait
 
     public function isEncryptable($key)
     {
-        // Log::debug('RainbowTrait!isEncryptable', [$key] );
-        // Log::debug('RainbowTrait!isEncryptable', [self::$rainbowTableConfig] );
+        // Log::channel('stderr')->debug('RainbowTrait!isEncryptable', [$key] );
+        // Log::channel('stderr')->debug('RainbowTrait!isEncryptable', [self::$rainbowTableConfig] );
         if(self::$rainbowTableIndexConfig){
           foreach (self::$rainbowTableIndexConfig['fields'] as $index => $val) {
             if($val['fName'] == $key)
@@ -61,7 +61,7 @@ trait RainbowTableIndexTrait
 
     protected static function booted()
     {
-        Log::debug('RainbowTrait!generateSlug!', ['set format'] );
+        Log::channel('stderr')->debug('RainbowTrait!generateSlug!', ['set format'] );
         self::$configFormat =
         [
             'table' => 'array|required',
@@ -94,7 +94,7 @@ trait RainbowTableIndexTrait
     // override save
     public function save(array $data=[])
     {
-      Log::debug('RainbowTrait!SAVE!', [$data]);
+      Log::channel('stderr')->debug('RainbowTrait!SAVE!', [$data]);
       $o = parent::save($data);
       // static::query()->save();
 
@@ -125,7 +125,7 @@ trait RainbowTableIndexTrait
 
       //  dd(static::query()->getModel());
 
-      Log::debug('RainbowTrait!SAVED! model!', [$data] );
+      Log::channel('stderr')->debug('RainbowTrait!SAVED! model!', [$data] );
     }
 
     public static function rtiSanitize($s, $safeChars, $fTransform)
@@ -136,7 +136,7 @@ trait RainbowTableIndexTrait
       $SAFE_CHARS=" àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.";
       $SAFE_CHARS = $safeChars;
 
-      Log::debug('RainbowTrait!rtiSanitize!', [$s, $safeChars, $fTransform] );
+      Log::channel('stderr')->debug('RainbowTrait!rtiSanitize!', [$s, $safeChars, $fTransform] );
 
       if( $fTransform == "UPPER_CASE")
       {
@@ -164,17 +164,26 @@ trait RainbowTableIndexTrait
       // splitta la stringa ' '
       // per ogni item vengono se >= della lunghezza minima vengono genarati i token
 
-      $pieces = explode(" ", $s);
-      $pieces2 = [];
-      foreach($pieces as $it)
+      // if $minTokenLen == 0 get all $s
+
+      if ( $minTokenLen <> 0 )
       {
-        if ( strlen($it) >= $minTokenLen )
+        $pieces = explode(" ", $s);
+        $pieces2 = [];
+        foreach($pieces as $it)
         {
-          $pieces2[] = $it;
+          if ( strlen($it) >= $minTokenLen )
+          {
+            $pieces2[] = $it;
+          }
         }
       }
+      else
+      {
+        $pieces2[] = $s;
+      }     
 
-      Log::debug('RainbowTrait!rtiTokenize!', [$s, $minTokenLen, $pieces2] );
+      Log::channel('stderr')->debug('RainbowTrait!rtiTokenize!', [$s, $minTokenLen, $pieces2] );
 
       $toReturn = [];
       foreach ($pieces2 as $key=>$value)
@@ -191,7 +200,15 @@ trait RainbowTableIndexTrait
 
     public static function rolling_window_string($s, $token_size)
     {
+
       $tokens = [];
+      if ($token_size == 0)
+      {
+        $tokens[] = $s;
+        return $tokens;
+      }
+
+      
       $str_len = strlen($s);
       if( $str_len > $token_size )
       {
@@ -220,7 +237,7 @@ trait RainbowTableIndexTrait
     public static function buildDataToIndex($model)
     {
       $conf = self::$rainbowTableIndexConfig;
-      Log::debug('RainbowTrait!buildDataToIndex!', [$model, $conf] );
+      Log::channel('stderr')->debug('RainbowTrait!buildDataToIndex!', [$model, $conf] );
 
       $toIndex = [];
       $toIndex['data'] = [];
@@ -252,7 +269,7 @@ trait RainbowTableIndexTrait
         if($item['fType'] == 'ENCRYPTED_FULL_TEXT')
         {
           // prendo il valore dal model / data
-          Log::debug('RainbowTrait!buildDataToIndex!FULLTEXT', [$item]);
+          Log::channel('stderr')->debug('RainbowTrait!buildDataToIndex!FULLTEXT', [$item]);
 
           $fName =  $item['fName'];
           $fValue = $model[$fName];
@@ -267,7 +284,7 @@ trait RainbowTableIndexTrait
           ];
 
           // Sanitizza i dati
-          Log::debug('RainbowTrait!buildDataToIndex!stiSanitize', [$item]);
+          Log::channel('stderr')->debug('RainbowTrait!buildDataToIndex!stiSanitize', [$item]);
           $data = self::rtiSanitize($fValue, $fSafeChars, $fTransform);
 
           // Tokenize ...
@@ -284,7 +301,7 @@ trait RainbowTableIndexTrait
         }
       }
 
-      Log::debug('RainbowTrait!buildDataToIndex!', [$toIndex]);
+      Log::channel('stderr')->debug('RainbowTrait!buildDataToIndex!', [$toIndex]);
 
       return $toIndex;
     }
@@ -300,7 +317,7 @@ trait RainbowTableIndexTrait
 
     public function setAttribute($key, $value)
     {
-      // Log::debug('RainbowTrait!setAttribute', [$key, $value] );
+      // Log::channel('stderr')->debug('RainbowTrait!setAttribute', [$key, $value] );
       if ($this->isEncryptable($key) && (!is_null($value) && $value != ''))
       {
         try {
@@ -316,15 +333,15 @@ trait RainbowTableIndexTrait
 
     public function getAttribute($key)
     {
-      // Log::debug('RainbowTrait!getAttribute', [$key] );
+      // Log::channel('stderr')->debug('RainbowTrait!getAttribute', [$key] );
       $value = parent::getAttribute($key);
 
       if ($this->isEncryptable($key) && (!is_null($value) && $value != ''))
       {
         try {
-          // Log::debug('RainbowTrait!getAttribute ... @@@ decrypt1!', [$key, $value] );
+          // Log::channel('stderr')->debug('RainbowTrait!getAttribute ... @@@ decrypt1!', [$key, $value] );
           $value = RainbowTableIndexEncrypter::decrypt($value);
-          // Log::debug('RainbowTrait!getAttribute ... @@@ decrypt2!', [$key, $value] );
+          // Log::channel('stderr')->debug('RainbowTrait!getAttribute ... @@@ decrypt2!', [$key, $value] );
         } catch (\Exception $th) {}
       }
 
@@ -335,7 +352,7 @@ trait RainbowTableIndexTrait
     {
 
         $attributes = parent::attributesToArray();
-        // Log::debug('SluggableTrait!attributesToArray', [$attributes] );
+        // Log::channel('stderr')->debug('SluggableTrait!attributesToArray', [$attributes] );
 
         if ($attributes) {
           foreach ($attributes as $key => $value)
@@ -357,8 +374,8 @@ trait RainbowTableIndexTrait
 
     public function newEloquentBuilder($query)
     {
-        Log::debug('RainbowTrait!newEloquentBuilder:query', [$query] );
-        Log::debug('RainbowTrait!newEloquentBuilder:conf', [self::$rainbowTableIndexConfig] );
+        Log::channel('stderr')->debug('RainbowTrait!newEloquentBuilder:query', [$query] );
+        Log::channel('stderr')->debug('RainbowTrait!newEloquentBuilder:conf', [self::$rainbowTableIndexConfig] );
         return RainbowTableIndexQueryBuilder::makeWithParameter($query, self::$rainbowTableIndexConfig);
         // makeWithParameter
         // return new RainbowQueryBuilder($query);
@@ -370,7 +387,7 @@ trait RainbowTableIndexTrait
     public function rebuildRainbowIndex()
     {
       $output = [];
-      Log::debug('RainbowTrait!rebuildRainbowIndex', [] );
+      Log::channel('stderr')->debug('RainbowTrait!rebuildRainbowIndex', [] );
       // static::query()->save();
 
       $rtService = new \Paulodiff\RainbowTableIndex\RainbowTableIndexService();
@@ -393,7 +410,7 @@ trait RainbowTableIndexTrait
       }
 
 
-      Log::debug('RainbowTrait!rebuildRainbowIndex', ['OK'] );
+      Log::channel('stderr')->debug('RainbowTrait!rebuildRainbowIndex', ['OK'] );
       $output[] = 'rebuildRainbowIndex:OK!';
       return $output;
     }
@@ -404,7 +421,7 @@ trait RainbowTableIndexTrait
     /* RESET index before a rebuilding ...      */
     public static function destroyRainbowIndex()
     {
-      Log::debug('RainbowTrait!destroyRainbowIndex', ['Start ... '] );
+      Log::channel('stderr')->debug('RainbowTrait!destroyRainbowIndex', ['Start ... '] );
 
       $rtService = new \Paulodiff\RainbowTableIndex\RainbowTableIndexService();
 
@@ -428,12 +445,12 @@ trait RainbowTableIndexTrait
         }
       }
 
-      Log::debug('RainbowTrait!buildDataToIndex!', [$toIndex]);
+      Log::channel('stderr')->debug('RainbowTrait!buildDataToIndex!', [$toIndex]);
 
       // reset and update index
       foreach( $toIndex as $item )
       {
-        Log::debug('RainbowTrait!buildDataToIndex! DESTROY...', [$item]);
+        Log::channel('stderr')->debug('RainbowTrait!buildDataToIndex! DESTROY...', [$item]);
         $rtService->resetRT($item['tag']);
       }
     }
@@ -442,7 +459,7 @@ trait RainbowTableIndexTrait
     public static function rebuildFullRainbowIndex()
     {
       $output = [];
-      Log::debug('RainbowTrait!rebuildFullRainbowIndex', [] );
+      Log::channel('stderr')->debug('RainbowTrait!rebuildFullRainbowIndex', [] );
       // static::query()->save();
 
       $rtService = new \Paulodiff\RainbowTableIndex\RainbowTableIndexService();
@@ -458,11 +475,11 @@ trait RainbowTableIndexTrait
         // $rtService->delRT($item['tag'],$item['value']);
         // $rtService->setRT($item['tag'],$item['key'],$item['value']);
         $item->rebuildRainbowIndex();
-        Log::debug('RainbowTrait!rebuildFullRainbowIndex', [$item->toArray()] );
+        Log::channel('stderr')->debug('RainbowTrait!rebuildFullRainbowIndex', [$item->toArray()] );
       }
 
       //  dd(static::query()->getModel());
-      Log::debug('RainbowTrait!rebuildFullRainbowIndex', ['END!'] );
+      Log::channel('stderr')->debug('RainbowTrait!rebuildFullRainbowIndex', ['END!'] );
       return $output;
     }
 

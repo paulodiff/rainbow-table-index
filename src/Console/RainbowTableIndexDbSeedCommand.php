@@ -1,6 +1,8 @@
 <?php
 namespace Paulodiff\RainbowTableIndex\Console;
 
+//.\vendor\bin\phpunit --filter the_db_seed_command tests\Unit\DbSeedCommandTest.php
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
@@ -84,7 +86,7 @@ class RainbowTableIndexDbSeedCommand extends Command
         
         Log::channel('stderr')->info('DbSeed:rows:', [$numOfrows] );
 
-        $numOfPosts = 10;
+        $numOfPosts = 2;
         $numOfAuthors = $numOfrows;
 
         Log::channel('stderr')->info('SeedData:', [
@@ -130,7 +132,7 @@ class RainbowTableIndexDbSeedCommand extends Command
             $p->save();
 
             Log::channel('stderr')->info('SeedData:' . $i . '#' . $numOfAuthors .']Author Added!:', [$p->toArray()]);
-
+            /*
             // Adding Posts
             for($j=0;$j<$numOfPosts;$j++)
             {
@@ -141,6 +143,7 @@ class RainbowTableIndexDbSeedCommand extends Command
               $q->save();
               Log::channel('stderr')->info('SeedData:' . $j . '#' . $numOfPosts .']Post Added!:', [$q->toArray()]);
             }
+            */
             
         }
 
