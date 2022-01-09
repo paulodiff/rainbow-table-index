@@ -122,7 +122,7 @@ class RainbowTableIndexCheckConfigCommand extends Command
         {
             Log::channel('stderr')->info('CheckConfig:', ['table comments already exits'] );
         }
-
+/*
         Log::channel('stderr')->info('CheckConfig:', ['Creating table posts ...'] );
         if ( !Schema::hasTable('posts'))
         {
@@ -139,7 +139,7 @@ class RainbowTableIndexCheckConfigCommand extends Command
         {
             Log::channel('stderr')->info('CheckConfig:', ['table posts already exits'] );
         }
-
+*/
 
         Log::channel('stderr')->info('CheckConfig:', ['Checking RainbowTableService'] );
         try {

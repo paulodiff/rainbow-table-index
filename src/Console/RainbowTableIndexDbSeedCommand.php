@@ -54,6 +54,7 @@ class RainbowTableIndexDbSeedCommand extends Command
             Log::channel('stderr')->info('CheckConfig:', ['table comments already exits'] );
         }
 
+        /*
         Log::channel('stderr')->info('CheckConfig:', ['Creating table posts ...'] );
         if ( !Schema::hasTable('posts'))
         {
@@ -70,6 +71,7 @@ class RainbowTableIndexDbSeedCommand extends Command
         {
             Log::channel('stderr')->info('CheckConfig:', ['table posts already exits'] );
         }
+        */
 
 
 

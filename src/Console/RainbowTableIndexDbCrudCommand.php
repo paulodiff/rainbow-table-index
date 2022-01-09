@@ -17,7 +17,6 @@ use Paulodiff\RainbowTableIndex\RainbowTableIndexService;
 use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
 
 use Paulodiff\RainbowTableIndex\Tests\Models\Author;
-use Paulodiff\RainbowTableIndex\Tests\Models\Post;
 
 class RainbowTableIndexDbCrudCommand extends Command
 {
@@ -77,7 +76,7 @@ class RainbowTableIndexDbCrudCommand extends Command
                     $DATA_ENCRYPTED_FULL_TEXT[$item['fName']] = array_merge($DATA_ENCRYPTED_FULL_TEXT[$item['fName']] , $keyList);
                 }
             }
-
+/*
             if ($item['fType'] == 'ENCRYPTED')
             {
                 $DATA_ENCRYPTED[$item['fName']] = [];
@@ -89,7 +88,7 @@ class RainbowTableIndexDbCrudCommand extends Command
                 }
 
             }
-
+*/
         }
 
         // RUN SEARCH ON DATA_ENCRYPTED_FULL_TEXT ....
