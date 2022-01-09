@@ -134,7 +134,7 @@ class RainbowTableIndexService
     public function setRT($tag, $s, $index)
     {
       Log::channel('stderr')->debug('RainbowTableService!setRT*!:', [$tag, $s, $index] );
-      $this->setToStorage($tag, $s, $index);
+      return $this->setToStorage($tag, $s, $index);
     }
 
     // Ritorna l'array degli id relativi ad un determinato tag
@@ -279,6 +279,7 @@ class RainbowTableIndexService
                 'rt_value' => $value,
             ]
         ]);
+        return $tname . ":" . $key . ":" . $value;
 
     }
 

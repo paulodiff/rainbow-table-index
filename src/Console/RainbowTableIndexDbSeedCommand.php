@@ -31,7 +31,6 @@ class RainbowTableIndexDbSeedCommand extends Command
     {
         $this->info('RainbowTableIndex DbSeed - CREATE TABLE ');
 
-
         Log::channel('stderr')->info('CheckConfig:', ['Creating table authors ...'] );
         if ( !Schema::hasTable('authors'))
         {
@@ -53,36 +52,9 @@ class RainbowTableIndexDbSeedCommand extends Command
         {
             Log::channel('stderr')->info('CheckConfig:', ['table comments already exits'] );
         }
-
-        /*
-        Log::channel('stderr')->info('CheckConfig:', ['Creating table posts ...'] );
-        if ( !Schema::hasTable('posts'))
-        {
-               Schema::create('posts', function (Blueprint $table) {
-                $table->increments('id');
-                $table->text('title');
-                $table->text('title_enc'); // for test only
-                $table->integer('author_id');
-                $table->timestamps();
-            });
-            Log::channel('stderr')->info('CheckConfig:', ['table posts created'] );
-        }
-        else
-        {
-            Log::channel('stderr')->info('CheckConfig:', ['table posts already exits'] );
-        }
-        */
-
-
-
-
-
-
-
-
+     
 
         $this->info('RainbowTableIndex DbSeed - Seeding! ');
-
 
         $numOfrows = $this->argument('numOfrows');
         
@@ -99,13 +71,23 @@ class RainbowTableIndexDbSeedCommand extends Command
         $faker = Faker::create('SeedData');
 
 
+        try
+        {
+            $a = new \Paulodiff\RainbowTableIndex\Tests\Models\Author();
+        }
+        catch (\Exception $e)
+        {
+            $a = new \App\Models\Author();
+        }
+
+
         Log::channel('stderr')->info('SeedData:', ['destroy authors rainbox index... ']);
-        Author::destroyRainbowIndex();
+        $a::destroyRainbowIndex();
 
         Log::channel('stderr')->info('SeedData:', ['destroy authors table... ']);
         try
         {
-            Author::truncate();
+            $a::truncate();
         } 
         catch (\Exception $e) 
         {
@@ -117,7 +99,17 @@ class RainbowTableIndexDbSeedCommand extends Command
 
         for($i=0;$i<$numOfAuthors;$i++)
         {
-            $p = new Author();
+            // $p = new Author();
+
+            try
+            {
+                $p = new \Paulodiff\RainbowTableIndex\Tests\Models\Author();
+            }
+            catch (\Exception $e)
+            {
+                $p = new \App\Models\Author();
+            }
+
 
             $p->name = strtoupper($faker->name());
             $p->name_enc = $p->name;

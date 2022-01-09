@@ -31,25 +31,32 @@ class RainbowTableIndexCheckConfigCommand extends Command
         Log::channel('stderr')->info('CheckConfig:', ['Checking Laravel Crypt and Hash function'] );
         try {
 
-            Log::channel('stderr')->info('Encryption config:', [config('hashing.driver')] );
+            Log::channel('stderr')->info('CheckConfig:Encryption config driver:', [config('hashing.driver')] );
             
-
-            $h1 = RainbowTableIndexEncrypter::encrypt('test');
-            $h2 = RainbowTableIndexEncrypter::encrypt('test');
-            $h3 = RainbowTableIndexEncrypter::encrypt('test');
+            $s = 'test';
+            $h1 = RainbowTableIndexEncrypter::encrypt($s);
+            $h2 = RainbowTableIndexEncrypter::encrypt($s);
             $cr1 = RainbowTableIndexEncrypter::decrypt($h1);
             $cr2 = RainbowTableIndexEncrypter::decrypt($h2);
-            $cr3 = RainbowTableIndexEncrypter::decrypt($h3);
-            Log::channel('stderr')->info('Encrypted:', [$h1] );
-            Log::channel('stderr')->info('Encrypted:', [$h2] );
-            Log::channel('stderr')->info('Encrypted:', [$h3] );
-            Log::channel('stderr')->info('Decrypted:', [$cr1] );
-            Log::channel('stderr')->info('Decrypted:', [$cr2] );
-            Log::channel('stderr')->info('Decrypted:', [$cr3] );
-            $h1 = RainbowTableIndexEncrypter::hash('test');
-            $h2 = RainbowTableIndexEncrypter::hash('test');
-            Log::channel('stderr')->info('Hash:', [$h1] );
-            Log::channel('stderr')->info('Hash:', [$h2] );
+            Log::channel('stderr')->info('CheckConfig:Encrypted:', [$h1] );
+            Log::channel('stderr')->info('CheckConfig:Encrypted:', [$h2] );
+            Log::channel('stderr')->info('CheckConfig:Decrypted:', [$cr1] );
+            Log::channel('stderr')->info('CheckConfig:Decrypted:', [$cr2] );
+            $hs1 = RainbowTableIndexEncrypter::hash($s);
+            $hs2 = RainbowTableIndexEncrypter::hash($s);
+            Log::channel('stderr')->info('CheckConfig:Hash:', [$hs1] );
+            Log::channel('stderr')->info('CheckConfig:Hash:', [$hs2] );
+
+            if ($h1 === $h2)
+            {
+                Log::channel('stderr')->info('WARNING SECURITY ALERT Encryption data is the SAME!!!!:', [] );
+            }
+
+            if ($hs1 <> $hs2)
+            {
+                Log::channel('stderr')->info('WARNING SECURITY ALERT HASH data is different!!!', [] );
+            }
+
 
         } catch (\Exception $e) {
             Log::channel('stderr')->info('CheckConfig:', ['Please check hash, encrypt Laravel config'] );
@@ -83,7 +90,7 @@ class RainbowTableIndexCheckConfigCommand extends Command
             Log::channel('stderr')->info('RAINBOW_TABLE_INDEX_ENCRYPT=true', ['false only for debugging purpose'] );
             // $this->assertTrue(false);
         }
-
+/*
         Log::channel('stderr')->info('CheckConfig:', ['Checking PHP SODIUM'] );
         try {
             $out = sodium_crypto_generichash('CHECK SODIUM');
@@ -93,7 +100,7 @@ class RainbowTableIndexCheckConfigCommand extends Command
             // die("Could not use PHP SODIUM.  Please check your PHP.INI for SODIUM configuration" . $e );
             // $this->assertTrue(false);
         }
-
+*/
 
         // Test database connection
         Log::channel('stderr')->info('CheckConfig:', ['Checking db connection'] );
@@ -105,7 +112,7 @@ class RainbowTableIndexCheckConfigCommand extends Command
             // $this->assertTrue(false);
         }
 
-
+/*
         Log::channel('stderr')->info('CheckConfig:', ['Creating table authors ...'] );
         if ( !Schema::hasTable('authors'))
         {
@@ -127,6 +134,7 @@ class RainbowTableIndexCheckConfigCommand extends Command
         {
             Log::channel('stderr')->info('CheckConfig:', ['table comments already exits'] );
         }
+*/        
 /*
         Log::channel('stderr')->info('CheckConfig:', ['Creating table posts ...'] );
         if ( !Schema::hasTable('posts'))
@@ -151,8 +159,8 @@ class RainbowTableIndexCheckConfigCommand extends Command
             $rtService = new \Paulodiff\RainbowTableIndex\RainbowTableIndexService();
             Log::channel('stderr')->info('CheckConfig:', ['Rainbow index creating ...  TAG DEMO'] );
             $value = random_int ( 1, 1000 );
-            $rtService->setRT('TEST','DEMO', $value);
-            Log::channel('stderr')->info('CheckConfig:', ['Rainbow index OK', $value] );
+            $o = $rtService->setRT('TEST','DEMO', $value);
+            Log::channel('stderr')->info('CheckConfig:', [$o] );
             Log::channel('stderr')->info('CheckConfig:', ['Check database for table rt_test!!!!!'] );
         } catch (\Exception $e) {
             Log::channel('stderr')->error('CheckConfig:', ['Rainbow ERROR', $e] );
