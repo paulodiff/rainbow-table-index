@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Log;
 
 use Paulodiff\RainbowTableIndex\Tests\TestCase;
 
-class DbSeedCommandTest extends TestCase
+class DbCrudCommandTest extends TestCase
 {
     /** @test */
-    function the_db_seed_command()
+    function the_db_crud_command()
     {
         // make sure we're starting from a clean state
         // if (File::exists(config_path('blogpackage.php'))) {
@@ -19,7 +19,11 @@ class DbSeedCommandTest extends TestCase
         // }
         // $this->assertFalse(File::exists(config_path('blogpackage.php')));
         Log::channel('stderr')->info('CheckConfig:artisan command', [] );
-        Artisan::call('RainbowTableIndex:dbSeed 100');
+        Artisan::call('RainbowTableIndex:dbCrud 100');
+
+
+
+
 
         // $this->assertTrue(File::exists(config_path('blogpackage.php')));
         $this->assertTrue(true);

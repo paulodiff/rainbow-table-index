@@ -14,6 +14,7 @@ use Faker\Factory as Faker;
 
 use Paulodiff\RainbowTableIndex\RainbowTableIndexEncrypter;
 use Paulodiff\RainbowTableIndex\RainbowTableIndexService;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
 
 use Paulodiff\RainbowTableIndex\Tests\Models\Author;
 use Paulodiff\RainbowTableIndex\Tests\Models\Post;
