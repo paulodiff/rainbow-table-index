@@ -144,6 +144,9 @@ composer require paulodiff/rainbow-table-index
 php artisan vendor:publish --provider="Paulodiff\RainbowTableIndex\RainbowTableIndexServiceProvider" --tag="config"
 ```
 
+#### Check Mysql config in .env !!!!
+
+
 #### Generate encryption key
 
 ```bash
@@ -154,7 +157,8 @@ and copy values in .env file.
 ### Check config ....
 
 - .env configuration
-- php SODIUM ? (TO REMOVE ???? Laravel/Crypto)
+
+>>> RAINBOW_TABLE_INDEX_ENCRYPT=true
 
 ```bash
 php artisan RainbowTableIndex:checkConfig
@@ -167,7 +171,7 @@ If all is ok! you are ready to go!
 Warning! This procedure build two table in the datbase:
 
 - authors
-- posts
+
 
 and seed this tables with 1000 rows of data.
 
@@ -206,6 +210,7 @@ php artisan RainbowTableIndex:keyGenerator
 RAINBOW_TABLE_INDEX_KEY=HfP+3eMCN/V6oMf9UgLt6hCtS3X3pklPc2M039xwMQI=
 RAINBOW_TABLE_INDEX_NONCE=XaCEPxsuyPsRle2z0zQ2MMM2MHb6Lfty
 RAINBOW_TABLE_INDEX_ENCRYPT=true
+RAINBOW_TABLE_INDEX_PREFIX=rti // TODO
 
 ```
 
@@ -216,7 +221,7 @@ php artisan RainbowTableIndex:checkConfig
 
 #### Create a migration
 ```bash
-php artisan make:migration create_author_post_migration
+php artisan make:migration create_authors_table
 ```
 
 edit migration file
@@ -238,25 +243,18 @@ edit migration file
             $table->timestamps();
         });
 
-        Schema::create('posts', function (Blueprint $table) {
-             $table->increments('id');
-             $table->text('title');
-             $table->text('title_enc'); // for test only
-             $table->integer('author_id');
-             $table->timestamps();
-        });
-  
+ 
     }
     public function down()
     {
         Schema::dropIfExists('authors');
-        Schema::dropIfExists('posts');
+
     }
 ```
 migrate database
 
 ```bash
-php migrate
+php artisan migrate
 ```
 
 create Author and Post model
@@ -265,7 +263,7 @@ edit App/Models/Author.php
 
 ```php
 <?php
-namespace Paulodiff\RainbowTableIndex\Tests\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -309,63 +307,24 @@ class Author extends Model
                 'fName' => 'role_enc',
                 'fType' => 'ENCRYPTED',
                 'fSafeChars' => ' àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.',
-                'fTransform' => 'UPPER_CASE',
-                'fMinTokenLen' => 3,
+                'fTransform' => 'ENCRYPTED_FULL_TEXT',
+                'fMinTokenLen' => 0,
             ],
 
         ]
 
     ];
 
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
-    }
+
 }
 
 ```
 
-edit App/Models/Post.php
 
-```php
-<?php
-namespace Paulodiff\RainbowTableIndex\Tests\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
-
-class Post extends Model
-{
-    use HasFactory;
-    use RainbowTableIndexTrait;
-
-    public static $rainbowTableIndexConfig = [
-
-        'table' => [
-            'primaryKey' => 'id',
-            'tableName' => 'posts',
-        ],
-        'fields' => [
-            [
-              'fName' => 'title_enc',
-              'fType' => 'ENCRYPTED_FULL_TEXT',
-              'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
-              'fTransform' => 'UPPER_CASE',
-              'fMinTokenLen' => 3,
-            ],
-
-        ]
-
-    ];
-}
-
-```
-
-run db seed (with 1000 rows)
+run db seed (with 100 rows)
 
 ```bash
-php artisan RainbowTableIndex:dbSeed 1000
+php artisan RainbowTableIndex:dbSeed 100
 ```
 
 run search test and metrics (with 100 )
@@ -373,6 +332,22 @@ run search test and metrics (with 100 )
 ```bash
 php artisan RainbowTableIndex:dbCrud 100
 ```
+
+### STOP Rainbow index is configured and running!, you want can test with a web app
+
+Installa livewire
+
+composer require livewire/livewire
+
+
+php artisan make:livewire posts
+
+app/Http/Livewire/Authors.php
+
+resources/views/livewire/authors.blade.php
+
+COPY FILES ...
+
 
 
 
@@ -646,7 +621,7 @@ for ($w=3;$w<= strlen($s); $w++) $numOfEntries += (strlen($s) + 1 - $w);
 
 sanitize_string
 
-# Future works
+# Example app with Laravel Livewire with search .... 
 ```
 ## Realdatabase - https://dbdiagram.io/d/61d3251f3205b45b73d51c25
 
