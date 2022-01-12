@@ -207,7 +207,6 @@ trait RainbowTableIndexTrait
         $tokens[] = $s;
         return $tokens;
       }
-
       
       $str_len = strlen($s);
       if( $str_len > $token_size )

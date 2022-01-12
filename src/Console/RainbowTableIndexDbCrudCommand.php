@@ -27,18 +27,14 @@ class RainbowTableIndexDbCrudCommand extends Command
 
     public function handle()
     {
-        $this->info('RainbowTableIndex DbCrud - search/update testE ');
+        $this->info('RainbowTableIndex DbCrud - create/read/update testE ');
 
         $numOfrows = $this->argument('numOfrows');
         $numOftests = $numOfrows;
 
         Log::channel('stderr')->info('CRUD: start!', [$numOftests] );
-
         
         $this->faker = Faker::create('PostCommentTest');
-
-        // Author search test
-        // $a = new Author();
 
         if ( class_exists('\Paulodiff\RainbowTableIndex\Tests\Models\Author') )
         {
@@ -49,9 +45,66 @@ class RainbowTableIndexDbCrudCommand extends Command
             $a = new \App\Models\Author();
         }
 
+        $author = $a::find(1);
+        Log::channel('stderr')->info('CRUD:find', [$author->toArray()]);
+
+        $author = $a::findOrFail(1);
+        Log::channel('stderr')->info('CRUD:findOrFail', [$author->toArray()]);
+
+        $author = $a::where('id', '>', 2)->firstOrFail();
+        Log::channel('stderr')->info('CRUD:firstOrFail', [$author->toArray()]);
+
+        $author = $a::firstOrCreate([
+            'name' => 'London to Paris',
+            'name_enc' => 'London to Paris',
+            'card_number' => 'London to Paris',
+            'card_number_enc' => 'London to Paris',
+            'address' => 'London to Paris',
+            'address_enc' => 'London to Paris',
+            'role' =>  'London to Paris',
+            'role_enc' =>  'London to Paris',
+        ]);
+        Log::channel('stderr')->info('CRUD:firstOrCreate', [$author->toArray()]);
+
+        $author = $a::create([
+            'name' => 'London to Paris',
+            'name_enc' => 'London to Paris',
+            'card_number' => 'London to Paris',
+            'card_number_enc' => 'London to Paris',
+            'address' => 'London to Paris',
+            'address_enc' => 'London to Paris',
+            'role' =>  'London to Paris',
+            'role_enc' =>  'London to Paris',
+        ]);
+        Log::channel('stderr')->info('CRUD:create', [$author->toArray()]);
 
 
 
+
+        $author = $a::updateOrCreate(
+            [
+                'name' => 'London to Paris',
+                'name_enc' => 'London to Paris',
+                'card_number' => 'London to Paris',
+                'card_number_enc' => 'London to Paris',
+                'address' => 'London to Paris',
+                'address_enc' => 'London to Paris',
+                'role' =>  'London to Paris',
+                'role_enc' =>  'London to Paris',
+            ],
+            ['id' => 2]
+        );
+        Log::channel('stderr')->info('CRUD:updateOrCreate', [$author->toArray()]);
+        
+          
+        
+        
+        
+        // ------------------------------------------------------------
+        return;
+        
+        
+        
         Log::channel('stderr')->info('CRUD:config', [$a::$rainbowTableIndexConfig]);
 
         $DATA_ENCRYPTED_FULL_TEXT = [];
@@ -61,7 +114,6 @@ class RainbowTableIndexDbCrudCommand extends Command
 
         // generate data for test
         // read 100 data and generate data to search...
-
         foreach($a::$rainbowTableIndexConfig['fields'] as $item)
         {
             Log::channel('stderr')->info('CRUD:item', [$item] );
@@ -89,23 +141,9 @@ class RainbowTableIndexDbCrudCommand extends Command
                     $DATA_ENCRYPTED_FULL_TEXT[$item['fName']] = array_merge($DATA_ENCRYPTED_FULL_TEXT[$item['fName']] , $keyList);
                 }
             }
-/*
-            if ($item['fType'] == 'ENCRYPTED')
-            {
-                $DATA_ENCRYPTED[$item['fName']] = [];
-                $ids = $a::select($item['fName'])->distinct()->limit(5)->get()->toArray();
-                Log::channel('stderr')->info('CRUD:distinct------->', [$ids] );
-                foreach($ids as $o)
-                {
-                    $DATA_ENCRYPTED[$item['fName']][] = $o[$item['fName']];
-                }
-
-            }
-*/
         }
 
         // RUN SEARCH ON DATA_ENCRYPTED_FULL_TEXT ....
-
         foreach($DATA_ENCRYPTED_FULL_TEXT as $k=>$v)
         {
             $fName_enc = $k;
@@ -158,62 +196,10 @@ class RainbowTableIndexDbCrudCommand extends Command
 
         // RUN SEARCH ON DATA_ENCRYPTED_FULL_TEXT !!!
 
-        foreach($DATA_ENCRYPTED as $k=>$v)
-        {
-            $totalItem = count($DATA_ENCRYPTED[$k]);
-            $curItem = 0;
-            $fName_enc = $k;
-            $fName = substr($fName_enc, 0, -4);
-            Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$fName, $fName_enc] );
-            $t1=0; $t2=0;
-            foreach ($DATA_ENCRYPTED[$k] as $v)
-            {
-                $curItem++;
-                Log::channel('stderr')->info('CRUD:DATA_ENCRYPTED------->', [$fName, $fName_enc, $k, $v] );
-
-                $token_2_search = $v;
-                $start1=hrtime(true);
-                $arr1 = $a::select('id')->where($fName_enc,  $token_2_search )->get()->toArray();
-                $end1=hrtime(true);
-                $eta1=$end1-$start1;
-                Log::channel('stderr')->info('Comment result encrypted field:', [$arr1] );
-
-                // Full text search in flat field
-                $start2=hrtime(true);
-                $arr2 = $a::select('id')->where($fName, $token_2_search)->get()->toArray();
-                Log::channel('stderr')->info('Comment result      flat field:', [$arr2] );
-                $end2=hrtime(true);
-                $eta2=$end2-$start2;
-
-                // Verify results ...
-                if ( $arr1 === $arr2) {
-                    Log::channel('stderr')->info('CRUD:' . $curItem . "#" . $totalItem . '-'  . $k .':'  . $token_2_search . '] same result for :', [$token_2_search, $eta1, $eta2, count($arr1), count($arr2)] );
-                    $t1 += $eta1; $t2 += $eta2;
-                } else {
-                    Log::error('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ :', [count($arr1), count($arr2)] );
-                    Log::error('Check mismatch :', [$fName, $token_2_search] );
-                    Log::error('arr1 enc  :', [$arr1] );
-                    Log::error('arr2 flat :', [$arr2] );
-                    exit(9999);
-                }
-
-            }
-            $t1 = $t1 / $totalItem / 1e+6;
-            $t2 = $t2 / $totalItem / 1e+6;
-            Log::channel('stderr')->info('CRUD:TOTAL' . $curItem . "#" . $totalItem . '-' . $k .']' . $token_2_search . '] time :', [$t1, $t2] );
-            $TIMING[] = $k . '-' . $curItem . "#" . $totalItem . '-' . 'time (enc,flat) : . [' . $t1 . ',' . $t2 . ']';
-
-        }
 
         Log::channel('stderr')->info('CRUD:TOTAL TIMING:', [$TIMING] );
-
-
-
-
-
-         
         Log::channel('stderr')->info('DbCrud finished!:', []);
-        
+       
     }
 
     private function configExists($fileName)

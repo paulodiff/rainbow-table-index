@@ -13,6 +13,18 @@ class Author extends Model
 
     // name, name_enc, card_number, card_number_enc, address, address_enc, role, role_enc
 
+
+    protected $fillable = [
+        'name', 
+        'name_enc',
+        'card_number', 
+        'card_number_enc', 
+        'address', 
+        'address_enc', 
+        'role', 
+        'role_enc'
+    ];
+
     public static $rainbowTableIndexConfig = [
   
 

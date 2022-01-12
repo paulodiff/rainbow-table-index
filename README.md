@@ -2,6 +2,10 @@
 
 # 🚨 DO NOT USE IN PRODUCTION! 🚨
 
+## TODO
+- prefix table
+- config default encrypted
+- Security customization
 
 <p align="center">
     <a href="https://laravel.com">
