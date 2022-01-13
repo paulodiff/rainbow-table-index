@@ -97,9 +97,59 @@ $p = Post::whereIn('id', [88]);
 
 ## Rainbow Table Index - details
 
-A "Rainbow Table Index" is a index that is builded by RainbowTableService:
+A "Rainbow Table Index" is a index that is builded by RainbowTableService.
+An Eloquent model is an oject that interact with a database.
+This is an example:
 
-- when a Eloquent Model are created/updated automagically the Rainbow Table index are created/updated
+```php
+<?php
+namespace App\Models;
+use Illuminate\Database\Eloquent\Model;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
+
+class Author extends Model
+{
+    use RainbowTableIndexTrait;
+    protected $fillable = [
+      'name'
+    ];
+    // Rainbow table configuration
+    public static $rainbowTableIndexConfig = [
+        'table' => [
+            'primaryKey' => 'id',
+            'tableName' => 'authors',
+        ],
+        'fields' => [
+            [
+              'fName' => 'name',
+              'fType' => 'ENCRYPTED_FULL_TEXT',
+              'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
+              'fTransform' => 'UPPER_CASE',
+              'fMinTokenLen' => 3,
+            ]
+        ]
+    ];
+}
+
+```
+
+This model define an Author with one encrypted field: 'name'. 
+The RainbowTableIndex configuration:
+
+- primaryKey : the table's primary key
+- tableName  : the table name database
+
+for each field to encrypt and index with RainbowTableIndex you define
+
+    - fName : field name
+    - fType : ENCRYTPED_FULL_TEXT (other type are coming soon)
+    - fSafeChars : an array of char to sanitize field value
+    - fTransform : UPPER_CASE|LOWER_CASE|NONE apply a transformation to field
+    - fMinTokenLen : the minumum token size use on toke generation
+
+
+
+- when a Eloquent Model (database item) are created/updated automagically the Rainbow Table index are created/updated
 - all values are hashed data
 - the index table name is encrypted
 - a database table for each Eloquent Model get all Rainbow Table Index data
