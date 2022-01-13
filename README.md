@@ -146,7 +146,7 @@ for each field to encrypt and index with RainbowTableIndex you define
 - fType : ENCRYTPED_FULL_TEXT (other type are coming soon)
 - fSafeChars : an array of char to sanitize field value
 - fTransform : UPPER_CASE|LOWER_CASE|NONE apply a transformation to field
-- fMinTokenLen : the minumum token size use on token generation
+- fMinTokenLen : the minumum token size use on token generation. If = 0 the tokenizer return the full data.
 
 When an Eloquent Model are created a row are inserted in database table end all field configured in rainbowTableIndexConfig are encrypted.
 Next all entries  are created in RainbowTableIndex.
@@ -183,9 +183,23 @@ a5fd15ffb7150fb7dec15b758f3a118d724b11c67a4483ac2ec6d8b631d0320b;1
 ...
 ```
 
+When a data need to be inserted in RainbowTableIndex a trasformation is applied:
+
+1. Only "safe chars" are valid   -   fSafeChars
+2. Optional : CASE TRASFORMATION -   fTransform
+3. Token size generation         -   fMinTokenLen
+
+An Example:
+
+Address data : "77712 O'Conner Plain Apt. 996 nw"  
+
+1. Safe char filter: "O'Conner Plain Apt. nw" 
+2. Case transformation: "O'CONNER PLAIN APT. NW"
+3. Tokenization "[O'C]['CO]ONNER PLAIN APT. NW" .... TODO (NW skipped!)
+
 If the model are updated or deleted the Rainbow Table index are updated.
 
-RainbowTableIndex characteristis:
+RainbowTableIndex characteristics:
 
 - when a Eloquent Model (database item) are created/updated automagically the Rainbow Table index are created/updated
 - all values are hashed data
@@ -199,7 +213,6 @@ The library can be used in contexts where it is necessary to guarantee the priva
 - name or surname 
 - address 
 - credit card number
-
 
 ## Installation
 
@@ -220,8 +233,7 @@ composer require paulodiff/rainbow-table-index
 php artisan vendor:publish --provider="Paulodiff\RainbowTableIndex\RainbowTableIndexServiceProvider" --tag="config"
 ```
 
-#### Check Mysql config in .env !!!!
-
+#### Check Laravel Mysql config in .env file
 
 ### Check config ....
 
@@ -245,7 +257,6 @@ Warning! This procedure build two table in the datbase:
 
 - authors
 
-
 and seed this tables with 1000 rows of data.
 
 #### Configure mysql
@@ -260,8 +271,6 @@ in app/models copy Author.php and Posts.php from ...
 
 
 
-https://github.com/paulodiff/rainbow-table-index.git
-
 Copy the following files in folder
 
  - Publish config  ... TODO
@@ -274,14 +283,10 @@ cd rainbow-table-index-app
 
 composer require paulodiff/rainbow-table-index
 
-// publishing
-php artisan vendor:publish --provider="Paulodiff\RainbowTableIndex\RainbowTableIndexServiceProvider" --tag="config"
 
 php artisan RainbowTableIndex:keyGenerator
 
 .env
-RAINBOW_TABLE_INDEX_KEY=HfP+3eMCN/V6oMf9UgLt6hCtS3X3pklPc2M039xwMQI=
-RAINBOW_TABLE_INDEX_NONCE=XaCEPxsuyPsRle2z0zQ2MMM2MHb6Lfty
 RAINBOW_TABLE_INDEX_ENCRYPT=true
 RAINBOW_TABLE_INDEX_PREFIX=rti // TODO
 
@@ -315,13 +320,10 @@ edit migration file
             $table->text('role_enc'); // for test only
             $table->timestamps();
         });
-
- 
     }
     public function down()
     {
         Schema::dropIfExists('authors');
-
     }
 ```
 migrate database
@@ -340,7 +342,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use  Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
 
 class Author extends Model
 {
@@ -349,7 +351,6 @@ class Author extends Model
 
     public static $rainbowTableIndexConfig = [
   
-
         'table' => [
             'primaryKey' => 'id',
             'tableName' => 'authors',
@@ -383,16 +384,11 @@ class Author extends Model
                 'fTransform' => 'ENCRYPTED_FULL_TEXT',
                 'fMinTokenLen' => 0,
             ],
-
         ]
-
     ];
-
-
 }
 
 ```
-
 
 run db seed (with 100 rows)
 
@@ -535,32 +531,9 @@ public static $rainbowTableIndexConfig = [
 
 
 
-The field configuration explanation:
 
 
-```php
-'fName' => NAME OF TABLE FIELD TO ENCRYPT
-'fType' => ENCRYPTION TYPE (ENCRYPTED_FULL_TEXT|ENCRYPTED) with Rainbow Index or only encription
-// data transformation config before insert into Rainbow Index
-'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
-'fTransform' => 'UPPER_CASE', (UPPER_CASE|LOWER_CASE|NONE)
-'fMinTokenLen' => 3, (Token lenght, smaller are skipped!))
 
-```
-
-When a data need to be inserted in RainbowTableIndex a trasformation is applied:
-
-1. Only "safe chars" are valid
-2. Optional : CASE TRASFORMATION
-3. Token size generation
-
-An Example:
-
-Address data : "77712 O'Conner Plain Apt. 996 nw"  
-
-1. Safe char filter: "O'Conner Plain Apt. nw" 
-2. Case transformation: "O'CONNER PLAIN APT. NW"
-3. Tokenization "[O'C]['CO]ONNER PLAIN APT. NW" .... TODO (NW skipped!)
 
 
 
