@@ -2,7 +2,7 @@
 
 # 🚨 DO NOT USE IN PRODUCTION! 🚨
 ## Disclaimer
-- This library is a proof of concept, and tis library is currently only used for experimental projects.
+- This library is a proof of concept.
 
 ## TODO
 - prefix table
@@ -145,7 +145,7 @@ for each field to encrypt and index with RainbowTableIndex you define
     - fType : ENCRYTPED_FULL_TEXT (other type are coming soon)
     - fSafeChars : an array of char to sanitize field value
     - fTransform : UPPER_CASE|LOWER_CASE|NONE apply a transformation to field
-    - fMinTokenLen : the minumum token size use on toke generation
+    - fMinTokenLen : the minumum token size use on token generation
 
 
 
