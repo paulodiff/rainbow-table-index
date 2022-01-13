@@ -7,8 +7,8 @@
 ## TODO
 - prefix table
 - config default encrypted
-- Security customization
-- Test relationship
+- security customization
+- test relationship
 
 <p align="center">
     <a href="https://laravel.com">
@@ -148,21 +148,21 @@ for each field to encrypt and index with RainbowTableIndex you define
 - fTransform : UPPER_CASE|LOWER_CASE|NONE apply a transformation to field
 - fMinTokenLen : the minumum token size use on token generation
 
-Where an Eloquent Model are created a row are inserted in database table end all field configured in rainbowTableIndexConfig are encrypted.
-Next allentries in RainbowTableIndex are created. automagically the Rainbow Table index are created/updated
+When an Eloquent Model are created a row are inserted in database table end all field configured in rainbowTableIndexConfig are encrypted.
+Next all entries  are created in RainbowTableIndex.
 
 ```php
 Author::create(['id'=> 1, 'name' => 'Billy White']); 
 ```
 Show the database authors data
 
-```php
+```bash
 id;name;
 1ZXlKcGRpSTZJa1JEUTB4cWNuTmxTRzFOSzFZMVowNUxiazVITjFFOVBTSXNJblpoYkhWbElqb2lUMFp2V1hwRVlsSkVWSFZ3TDBGNldURklXRzVuVEZnMk16QXhVQ3RpY1dWUVowMTJha1V5WkdOeFNUMGlMQ0p0WVdNaU9pSm1NbUpqWTJSaE5HSTNORFUxTlRjME16ZGlOalEyWVRjd05tRXdORFF4T1RCbU9EZGtaREl6TlRsallqa3laR0UwTTJJelkyVTFaV1kyWWpFd00yUXpJaXdpZEdGbklqb2lJbjA9;
 ```
 
 Show the rainbow table index data related to field 'name'. 
-```php
+```bash
 table name: rt_6f48819d50e9b840e0c9a5e4a1375145
 table data:
 rt_key;rt_value
