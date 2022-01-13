@@ -235,31 +235,35 @@ php artisan vendor:publish --provider="Paulodiff\RainbowTableIndex\RainbowTableI
 
 #### Check Laravel Mysql config in .env file
 
-### Check config ....
-
-- .env configuration
-
-to enable debug information
-DEBUG_LEVEL = debug
-
-for debagging purpose you can use RainbowIndexTable without encryption with this options:
->>> RAINBOW_TABLE_INDEX_ENCRYPT=true
+#### Running check config
 
 ```bash
 php artisan RainbowTableIndex:checkConfig
 ```
+### Configuration options
+
+- .env configuration
+
+to enable debug information
+>>> DEBUG_LEVEL = debug
+
+- config/rainbowtableindexconfig.php
+
+for debugging RainbowIndexTable without encryption with this options:
+>>> RAINBOW_TABLE_INDEX_ENCRYPT=true
+
+
 
 I'ts all ok! you are ready to go!
 
 ### Create a working demo
 
-Warning! This procedure build two table in the datbase:
+Warning! This procedure build a table in the datbase:
 
 - authors
 
-and seed this tables with 1000 rows of data.
+and seed this tables with 1000 rows of data for testing.
 
-#### Configure mysql
 
 #### Copy model
 
@@ -271,9 +275,6 @@ in app/models copy Author.php and Posts.php from ...
 
 
 
-Copy the following files in folder
-
- - Publish config  ... TODO
 
 #### create model Author
 ```bash
