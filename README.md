@@ -471,3 +471,7 @@ for ($w=3;$w<= strlen($s); $w++) $numOfEntries += (strlen($s) + 1 - $w);
 
 sanitize_string
 
+# Future works
+
+-----
+
