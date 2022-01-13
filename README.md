@@ -9,6 +9,7 @@
 - config default encrypted
 - security customization
 - test relationship
+- stats
 
 <p align="center">
     <a href="https://laravel.com">
@@ -244,15 +245,13 @@ php artisan RainbowTableIndex:checkConfig
 
 - .env configuration
 
-to enable debug information
->>> DEBUG_LEVEL = debug
+#to enable debug information
+DEBUG_LEVEL = debug
 
 - config/rainbowtableindexconfig.php
 
-for debugging RainbowIndexTable without encryption with this options:
->>> RAINBOW_TABLE_INDEX_ENCRYPT=true
-
-
+#for debugging RainbowIndexTable without encryption with this options:
+RAINBOW_TABLE_INDEX_ENCRYPT=true
 
 I'ts all ok! you are ready to go!
 
@@ -299,6 +298,7 @@ php artisan RainbowTableIndex:checkConfig
 ### Configure and running demo and test
 
 #### Create a migration
+
 ```bash
 php artisan make:migration create_authors_table
 ```
@@ -333,7 +333,7 @@ migrate database
 php artisan migrate
 ```
 
-create Author and Post model
+create Author model
 
 edit App/Models/Author.php
 
@@ -405,7 +405,7 @@ php artisan RainbowTableIndex:dbCrud 100
 
 ### STOP Rainbow index is configured and running!, you want can test with a web app
 
-Installa livewire
+Livewire installation
 
 composer require livewire/livewire
 
@@ -416,20 +416,7 @@ app/Http/Livewire/Authors.php
 
 resources/views/livewire/authors.blade.php
 
-COPY FILES ...
 
-
-
-
-Create a dabase named: **rainbow**  and configure mysql in .env 
-
-```bash
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=rainbow
-DB_USERNAME=root
-DB_PASSWORD=
 ```
 ## Security customization
 
@@ -438,190 +425,6 @@ DB_PASSWORD=
 
 
 ### Using test
-
-RainbowTableIndex01CheckConfigTest.php
-
-- 
-
-Run Check configuration for the first time
-
-php artisan db:seed --class=RainbowCheckConfig
-
-- check config Rainbow security values
-- check PHP SODIUM
-- check database connection
-- create table for test (Author, Post, Comments, Categories)
-- create a sample Rainbow Index
-
-set to .env
-RAINBOW_TABLE_KEY=...
-RAINBOW_TABLE_NONCE=..
-
-and run
-
-php artisan optimize
-
-// re check configuration with until ALL OK!
-php artisan db:seed --class=RainbowCheckConfig
-
-RainbowTableIndex02SeedDataTest.php
-
-Edit if number of seeds. ...
-    // -------------------- TO CHANGE ---------------------------------------
-    public $NUM_OF_AUTHORS_TO_CREATE = 1000;
-    public $NUM_OF_POSTS_TO_CREATE = 2;
-    // -------------------- TO CHANGE ---------------------------------------
-
-All ok! Installation and configuration is complete!
-
-Run a demo with Posts, Comments and Categories
-
-## Model configuration
-
-This is the configuration to use encrypted/searchable field data in a model. 
-
-For example, if you want configure this fields:
-
-- name_enc, address_enc, card_number_enc are encrypted and searchable with Rainbow Index
-
-- role_enc are only encrypted
-
-the `$rainbowTableIndexConfig` is:
-
-```php
-		
-public static $rainbowTableIndexConfig = [
-       'table' => [
-            'primaryKey' => 'id',       // table primary key
-            'tableName' => 'authors',   // table name
-        ],
-        'fields' => [
-            [
-              'fName' => 'name_enc',
-              'fType' => 'ENCRYPTED_FULL_TEXT',
-              'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
-              'fTransform' => 'UPPER_CASE',
-              'fMinTokenLen' => 3,
-            ],
-
-            [
-                'fName' => 'address_enc',
-                'fType' => 'ENCRYPTED_FULL_TEXT',
-                'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
-                'fTransform' => 'UPPER_CASE',
-                'fMinTokenLen' => 4,
-            ],
-            [
-                'fName' => 'card_number_enc',
-                'fType' => 'ENCRYPTED_FULL_TEXT',
-                'fSafeChars' => '1234567890',
-                'fTransform' => 'NONE',
-                'fMinTokenLen' => 4,
-            ],
-            [
-                'fName' => 'role_enc',
-                'fType' => 'ENCRYPTED',
-                'fSafeChars' => ' àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.',
-                'fTransform' => 'UPPER_CASE',
-                'fMinTokenLen' => 3,
-            ],
-
-        ]
-    ]
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-php artisan make:migration create_posts_comments_categories_table
-
-# fill migration
-
-```
-<?php
-
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
-class CreatePostsCommentsCategoriesTable extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('posts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('title');
-            $table->string('title_enc');
-            $table->timestamps();
-        });
-
-        Schema::create('comments', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('post_id')->unsigned();
-            $table->text('body');
-            $table->text('body_enc');
-            $table->text('category');
-            $table->timestamps();
-        });
-    }
-       
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('posts');
-        Schema::dropIfExists('comments');
-        Schema::dropIfExists('categories');
-    }
-}
-```
-
-# run migration
-
-php artisan migrate
-
-# create model
-
-php artisan make:model Post
-php artisan make:model Comment
-php artisan make:model Category
-
-# fill modes
-
-TODO edit Post & Comment .php
-
-# run seeder 
-
-php artisan db:seed --class=PostCommentSeeder
-
-# run test
-
-# set LOG LEVEL to show activities ...
-.env
-LOG_LEVEL=debug
-php artisan optimize
-
-php artisan db:seed --class=PostCommentTest
-
 
 
 # Service operation
@@ -668,45 +471,3 @@ for ($w=3;$w<= strlen($s); $w++) $numOfEntries += (strlen($s) + 1 - $w);
 
 sanitize_string
 
-# Example app with Laravel Livewire with search .... 
-```
-## Realdatabase - https://dbdiagram.io/d/61d3251f3205b45b73d51c25
-
-Table player as A {
-  player_id int [pk] // auto-increment
-  player_full_name varchar
-  player_address varchar
-  player_credit varchar
-  player_phone varchar
-}
-
-Table team as B {
-  team_id int [pk]
-  team_name varchar
-  team_type_id int
-}
-
-Table team_type as C {
-  team_type_id int [pk]
-  team_type_description varchar
-  team_type_rules varchar
-}
-
-Table roster as D {
-  roster_id int [pk]
-  roster_player_id int
-  roster_team_id int
-  roster_role_id int
-  roster_amount varchar 
-}
-
-Table roles as E {
-  roles_id int [pk]
-  roles_description varchar
-  roles_fee varchar
-}
-
-
-
-
-```
