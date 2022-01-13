@@ -142,11 +142,11 @@ The RainbowTableIndex configuration:
 
 for each field to encrypt and index with RainbowTableIndex you define
 
-    - fName : field name
-    - fType : ENCRYTPED_FULL_TEXT (other type are coming soon)
-    - fSafeChars : an array of char to sanitize field value
-    - fTransform : UPPER_CASE|LOWER_CASE|NONE apply a transformation to field
-    - fMinTokenLen : the minumum token size use on token generation
+- fName : field name
+- fType : ENCRYTPED_FULL_TEXT (other type are coming soon)
+- fSafeChars : an array of char to sanitize field value
+- fTransform : UPPER_CASE|LOWER_CASE|NONE apply a transformation to field
+- fMinTokenLen : the minumum token size use on token generation
 
 Where an Eloquent Model are created a row are inserted in database table end all field configured in rainbowTableIndexConfig are encrypted.
 Next allentries in RainbowTableIndex are created. automagically the Rainbow Table index are created/updated
