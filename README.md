@@ -68,12 +68,13 @@ By extending the Eloquent classes, and using the Laravel Traits, it is possible 
 The goal: perform a search using LIKE operator in encrypted data.
 Building an alternative index (**Rainbow Table Index**) with a library, is possible to index encrypted values and query this values.
 
-This is a working sample, with a Post model with fields "id" and "title". We create a Post item.
+This is a working sample, with a Post model with fields "id" and "title". 
+We create a Post item:
 
 ```php
 Post::create(['id'=> 88, 'title' => 'Beauty']); 
 ```
-The resultant Rainbow Index Table  (with the minimum token size is 3):
+The resultant RainbowTableIndex  (with the minimum token size is 3):
 
 ```php
 Rainbow Table Index data
@@ -146,6 +147,37 @@ for each field to encrypt and index with RainbowTableIndex you define
     - fSafeChars : an array of char to sanitize field value
     - fTransform : UPPER_CASE|LOWER_CASE|NONE apply a transformation to field
     - fMinTokenLen : the minumum token size use on token generation
+
+Where an Eloquent Model are created a row are inserted in database table end all field configured in rainbowTableIndexConfig are encrypted.
+Next allentries in RainbowTableIndex are created. automagically the Rainbow Table index are created/updated
+
+```php
+Author::create(['id'=> 1, 'name' => 'Billy White']); 
+```
+Show the database authors data
+
+id;name;
+1ZXlKcGRpSTZJa1JEUTB4cWNuTmxTRzFOSzFZMVowNUxiazVITjFFOVBTSXNJblpoYkhWbElqb2lUMFp2V1hwRVlsSkVWSFZ3TDBGNldURklXRzVuVEZnMk16QXhVQ3RpY1dWUVowMTJha1V5WkdOeFNUMGlMQ0p0WVdNaU9pSm1NbUpqWTJSaE5HSTNORFUxTlRjME16ZGlOalEyWVRjd05tRXdORFF4T1RCbU9EZGtaREl6TlRsallqa3laR0UwTTJJelkyVTFaV1kyWWpFd00yUXpJaXdpZEdGbklqb2lJbjA9;
+
+Show the rainbow table index data related to field 'name'. 
+table name: rt_6f48819d50e9b840e0c9a5e4a1375145
+table data:
+rt_key;rt_value
+7327b0fa163b48eb9dca10700a55d717406e25f24da3223d78257bb55cbd5e77;1
+3da30095b68d8df0348b86660aa9f8c33617b2f9bbecae4ef342bd708fcbf1fc;1
+89aa7c63a9087d2f4da32e49d5949024d9c9a41cde32bb0c80ea3edc28c9384b;1
+979d88c360ae25de60c5afdf97e48760e1dbff047c595431272d3c69c0056484;1
+91024262f3055431a4aca784cca25fde500a3e6a498e12717d498667c322fec3;1
+bf64a77aef0838485fff59fde2c889bea48c451ad7c157f005d5b93bf686ddb1;1
+3d5834be7f15366d5a5d9c823d3e39713f932b6378f210cf3e842417bd20f81f;1
+334dea03de177f5f22bfd8a571f4f1c696be6d08fa135a161680a3b0dfa1302c;1
+4b0cdc4e3d3c57e606bdd14b4c69b4eb0d6535947290429fa135231b150b1173;1
+0f91f40beba2d9e7400653124342097b17a05d62ddbc4fe8b4205d0a256344e2;1
+b5da40127d66e01bc324557fa056c3ed89b7c44b832399c2373df3dc7ea60b29;1
+fad5fc5354ddbd9adaccd041f96e7aa4c8a460d4acd94c0eb099ef637c6fb6df;1
+f0647065844b606d53db1adef3d540404cc00e9ab040d14c422f6f4b9f5e4979;1
+a5fd15ffb7150fb7dec15b758f3a118d724b11c67a4483ac2ec6d8b631d0320b;1
+...
 
 
 
