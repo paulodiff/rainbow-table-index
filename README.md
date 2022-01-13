@@ -1,11 +1,14 @@
 # Laravel database data encryption with full text search
 
 # 🚨 DO NOT USE IN PRODUCTION! 🚨
+## Disclaimer
+- This library is a proof of concept, and tis library is currently only used for experimental projects.
 
 ## TODO
 - prefix table
 - config default encrypted
 - Security customization
+- Test relationship
 
 <p align="center">
     <a href="https://laravel.com">
@@ -44,13 +47,13 @@ With encrypted data fields, you can search only with exact field name value:
 $p = Post::where('title','Beautiful Post'); // OK
 ```
 
-but it's not possible using LIKE
+but it's not possible using LIKE operator:
 
 ```php
 $p = Post::where('title','LIKE','%Bea%'); // WRONG!
 ```
 
-because the real data stored in database table are encrypted:
+because the real data are stored in database table in encrypted form:
 
 ```php
 "id";"title"
@@ -65,12 +68,13 @@ By extending the Eloquent classes, and using the Laravel Traits, it is possible 
 The goal: perform a search using LIKE operator in encrypted data.
 Building an alternative index (**Rainbow Table Index**) with a library, is possible to index encrypted values and query this values.
 
-This is a working sample, with a Post model ([id, title]). We create a Post item.
+This is a working sample, with a Post model with fields "id" and "title". We create a Post item.
 
 ```php
 Post::create(['id'=> 88, 'title' => 'Beauty']); 
 ```
-The resultant Rainbow Index Table  (is the minimum token size is 3):
+The resultant Rainbow Index Table  (with the minimum token size is 3):
+
 ```php
 Rainbow Table Index data
 post:title BEA 88
@@ -88,10 +92,10 @@ $p = Post::where('title','LIKE','%BEA%');
 ```
 is automatically converted first in a search on Rainbow Table Index and next the ids of token 'BEA' the query become:
 ```php
-$p = Post::whereIn('id', [88,99]);
+$p = Post::whereIn('id', [88]);
 ```
 
-## Rainbow Table Index 
+## Rainbow Table Index - details
 
 A "Rainbow Table Index" is a index that is builded by RainbowTableService:
 
@@ -151,24 +155,21 @@ php artisan vendor:publish --provider="Paulodiff\RainbowTableIndex\RainbowTableI
 #### Check Mysql config in .env !!!!
 
 
-#### Generate encryption key
-
-```bash
-php artisan RainbowTableIndex:keyGenerator
-```
-and copy values in .env file.
-
 ### Check config ....
 
 - .env configuration
 
+to enable debug information
+DEBUG_LEVEL = debug
+
+for debagging purpose you can use RainbowIndexTable without encryption with this options:
 >>> RAINBOW_TABLE_INDEX_ENCRYPT=true
 
 ```bash
 php artisan RainbowTableIndex:checkConfig
 ```
 
-If all is ok! you are ready to go!
+I'ts all ok! you are ready to go!
 
 ### Create a working demo
 
