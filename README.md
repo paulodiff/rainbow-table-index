@@ -156,10 +156,13 @@ Author::create(['id'=> 1, 'name' => 'Billy White']);
 ```
 Show the database authors data
 
+```php
 id;name;
 1ZXlKcGRpSTZJa1JEUTB4cWNuTmxTRzFOSzFZMVowNUxiazVITjFFOVBTSXNJblpoYkhWbElqb2lUMFp2V1hwRVlsSkVWSFZ3TDBGNldURklXRzVuVEZnMk16QXhVQ3RpY1dWUVowMTJha1V5WkdOeFNUMGlMQ0p0WVdNaU9pSm1NbUpqWTJSaE5HSTNORFUxTlRjME16ZGlOalEyWVRjd05tRXdORFF4T1RCbU9EZGtaREl6TlRsallqa3laR0UwTTJJelkyVTFaV1kyWWpFd00yUXpJaXdpZEdGbklqb2lJbjA9;
+```
 
 Show the rainbow table index data related to field 'name'. 
+```php
 table name: rt_6f48819d50e9b840e0c9a5e4a1375145
 table data:
 rt_key;rt_value
@@ -178,7 +181,7 @@ fad5fc5354ddbd9adaccd041f96e7aa4c8a460d4acd94c0eb099ef637c6fb6df;1
 f0647065844b606d53db1adef3d540404cc00e9ab040d14c422f6f4b9f5e4979;1
 a5fd15ffb7150fb7dec15b758f3a118d724b11c67a4483ac2ec6d8b631d0320b;1
 ...
-
+```
 
 
 - when a Eloquent Model (database item) are created/updated automagically the Rainbow Table index are created/updated
