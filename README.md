@@ -183,31 +183,14 @@ a5fd15ffb7150fb7dec15b758f3a118d724b11c67a4483ac2ec6d8b631d0320b;1
 ...
 ```
 
+If the model are updated or deleted the Rainbow Table index are updated.
+
+RainbowTableIndex characteristis:
 
 - when a Eloquent Model (database item) are created/updated automagically the Rainbow Table index are created/updated
 - all values are hashed data
 - the index table name is encrypted
 - a database table for each Eloquent Model get all Rainbow Table Index data
-
-This is sample of Rainbow Table Index for Post model on encrypted title_enc field
-
-```
-Index table name: rt_098f6bcd4621d373cade4e832627b4f6
-Index table data:
-'72caf77378e7701778ce0cccc0fd039e0d94b98a55c60ba682fc99d6721603c8', 1,
-'dbd3f5ac60697264f02f0c15a48ea14caee3d406f67e2f9984428d47103ec044', 1,
-'86157f358f2367aa1982a87b5b50c46cf2bbcbdc4ac6fe433e7d70832e515327', 1,
-'ea65a3097b9a8b21001fff748c41361ebde9eeb4da8337ac52e399c5f7b56c63', 1,
-'b8d6d5ae5fc5d8d9f30abd26c4121181d9d0ff93e5c284acbbf4a906746577e2', 1,
-'05ae2a908b7b449aae4da0fcd4643a9d4a057da348483ae2003af5eaaa707559', 1,
-'e89cb3bd55c9154a4e2d880328484c4319ba256bd8bfa831c90de1799ee05ebd', 1,
-'594030e2225adb878eb684500e8052c1e0fe4d12ac45b44131a118b331c846ca', 1,
-'a4a769bcea0af688f59b7a78b2b2b3c17666f159a351d82029c22acfa1e2b2e3', 1,
-'01575a87c3747df1428f82505357aa714dc901adad47856df7721264ca60fa62', 1,
-'8d5aec01cdd256ccea2dcb4dd740acf471c2dec508bec2e97b2c3342144c5fc7', 1,
-'288185f42ed618ed8ed7f95f0d7869eda7d85fcaec6a49d81ca1e6ebe89e8c36', 1,
-'85e4c5234afdcf3dc8f885d82361849df47c938d36ae4330d2a17a4e4bd57f32', 1,
-```
 
 ## Use case
 
