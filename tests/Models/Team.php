@@ -3,7 +3,7 @@ namespace Paulodiff\RainbowTableIndex\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use  Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
+use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
 
 class Team extends Model
 {
@@ -21,7 +21,7 @@ class Team extends Model
 
     public static $rainbowTableIndexConfig = [
           'table' => [
-            'primaryKey' => 'id',
+            'primaryKey' => 'team_id',
             'tableName' => 'teams',
         ],
         'fields' => [

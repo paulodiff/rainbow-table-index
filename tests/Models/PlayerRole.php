@@ -5,28 +5,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
 
-class TeamType extends Model
+class PlayerRole extends Model
 {
     use HasFactory;
     use RainbowTableIndexTrait;
 
-    protected $table = 'team_types';
-    protected $primaryKey = 'team_type_id';
+    protected $table = 'player_roles';
+    protected $primaryKey = 'player_role_id';
 
     protected $fillable = [
-        'team_type_description', 
-        'team_type_description_enc',
-        'team_type_rules', 
+        'player_role_description', 
+        'player_role_description_enc', 
+        'player_role_fee', 
     ];
 
     public static $rainbowTableIndexConfig = [
           'table' => [
-            'primaryKey' => 'team_type_id',
-            'tableName' => 'teams',
+            'primaryKey' => 'player_role_id',
+            'tableName' => 'player_roles',
         ],
         'fields' => [
             [
-              'fName' => 'team_type_description_enc',
+              'fName' => 'player_role_description_enc',
               'fType' => 'ENCRYPTED_FULL_TEXT',
               'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
               'fTransform' => 'UPPER_CASE',
@@ -35,9 +35,9 @@ class TeamType extends Model
         ]
     ];
     
-    public function teams()
+    public function rosters()
     {
-        return $this->hasMany(Team::class);
+        return $this->hasMany(Roster::class);
     }
 
 }

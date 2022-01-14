@@ -43,7 +43,7 @@ composer dump-autoload
 //// FULL TEST -------------------------------------------------------------------------------------
 
 
-
+```
 
 Table player as A {
   player_id int [pk] // auto-increment
@@ -67,6 +67,7 @@ Table team_type as C {
 
 Table roster as D {
   roster_id int [pk]
+  roster_description varchar
   roster_player_id int
   roster_team_id int
   roster_player_role_id int
@@ -120,3 +121,4 @@ Enum products_status {
 // Ref: products.merchant_id > merchants.id // many-to-one
 //composite foreign key
 // Ref: merchant_periods.(merchant_id, country_code) > merchants.(id, country_code)
+```

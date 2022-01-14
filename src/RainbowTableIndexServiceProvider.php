@@ -7,6 +7,7 @@ use Paulodiff\RainbowTableIndex\Console\RainbowTableIndexCheckConfigCommand;
 use Paulodiff\RainbowTableIndex\Console\RainbowTableIndexDbSeedCommand;
 use Paulodiff\RainbowTableIndex\Console\RainbowTableIndexDbCrudCommand;
 use Paulodiff\RainbowTableIndex\Console\RainbowTableIndexDbMaintenanceCommand;
+use Paulodiff\RainbowTableIndex\Console\RainbowTableIndexDbRelationalCommand;
 
 class RainbowTableIndexServiceProvider extends ServiceProvider
 {
@@ -37,6 +38,7 @@ class RainbowTableIndexServiceProvider extends ServiceProvider
                     RainbowTableIndexDbSeedCommand::class,
                     RainbowTableIndexDbCrudCommand::class,
                     RainbowTableIndexDbMaintenanceCommand::class,
+                    RainbowTableIndexDbRelationalCommand::class,
                 ]);
             }
 

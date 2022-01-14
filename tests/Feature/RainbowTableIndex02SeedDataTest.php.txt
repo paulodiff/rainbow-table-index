@@ -1,5 +1,7 @@
 <?php
 
+// ###### SHOW COMMAND !!!
+
 // php artisan test --testsuite=Feature --filter=RainbowTableIndex02SeedDataTest --stop-on-failure
 
 namespace Paulodiff\RainbowTableIndex\Tests\Feature;

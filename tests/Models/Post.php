@@ -3,7 +3,6 @@ namespace Paulodiff\RainbowTableIndex\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 use Paulodiff\RainbowTableIndex\RainbowTableIndexTrait;
 
 class Post extends Model
