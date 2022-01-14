@@ -151,9 +151,9 @@ class RainbowTableIndexDbRelationalCommand extends Command
         $numOfTeams = 10;
         $numOfTeamTypes = 10;
         $numOfPlayerRoles = 5;
-        $numOfRosters = 10;
+        $numOfRosters = 30;
 
-        $numOfAuthors = $numOfrows;
+        // $numOfAuthors = $numOfrows;
 
         $faker = Faker::create('SeedData');
 
@@ -244,7 +244,6 @@ class RainbowTableIndexDbRelationalCommand extends Command
         Log::channel('stderr')->info('Seeding:Roster', [] );
         for($i=0;$i<$numOfRosters;$i++)
         {
-
             if ( class_exists('\Paulodiff\RainbowTableIndex\Tests\Models\Roster') )
             {
                 $roster = new \Paulodiff\RainbowTableIndex\Tests\Models\Roster();
@@ -253,7 +252,7 @@ class RainbowTableIndexDbRelationalCommand extends Command
             {
                 $roster = new \App\Models\Roster();
             }
-            $roster->roster_description = 'ROSTER_' . ($i + 1);
+            $roster->roster_description = 'ROSTER_' . $faker->numberBetween(1, 3);
             $roster->roster_description_enc = $roster->roster_description;
 
             $roster->roster_player_id = $faker->numberBetween(1, $numOfPlayers);
@@ -283,14 +282,43 @@ class RainbowTableIndexDbRelationalCommand extends Command
             }
 
             // $rs = $roster::all();
+            $result = $roster::all();
 
-            foreach ($roster::all() as $rs) {
-                Log::channel('stderr')->info('Quering:...', [$rs->roster_description] );
-                Log::channel('stderr')->info('Quering:...', [$rs->team->team_name] );
+            $collection = collect($result->toArray());
+
+            $sorted = $collection->sortBy([
+                fn ($a, $b) => $a['roster_description'] <=> $b['roster_description'],
+                // fn ($a, $b) => $b['team_name'] <=> $a['team_name'],
+            ]);
+            
+            $sorted->values()->all();
+
+            print_r($sorted->values()->all());
+
+            exit(234324);
+           
+            Log::channel('stderr')->info('', [$result->toArray()]);
+
+            // print_r($result->toArray());
+
+
+            foreach ($result as $rs) {
+                Log::channel('stderr')->info('Quering:...', [
+                    //$rs->toArray(),
+                    $rs->roster_description,
+                    $rs->team->team_name,
+                    $rs->player->player_name,
+                    $rs->playerRole->player_role_description,
+                    $rs->playerRole->player_role_description_enc,
+                ]);
+                // Log::channel('stderr')->info('Quering:...', [$rs->team->team_name] );
             }
             
             /*
-             $user->posts()->where('active', 1)->get();
+            
+            $roles = User::find(1)->roles()->orderBy('name')->get();
+            
+            $user->posts()->where('active', 1)->get();
              $flights = Flight::where('active', 1)
                ->orderBy('name')
                ->take(10)
@@ -313,89 +341,8 @@ class RainbowTableIndexDbRelationalCommand extends Command
         }    
 
 
-/*
-        if ( class_exists('\Paulodiff\RainbowTableIndex\Tests\Models\Author') )
-        {
-            $a = new \Paulodiff\RainbowTableIndex\Tests\Models\Author();
-        }
-        else
-        {
-            $a = new \App\Models\Author();
-        }
 
 
-        try
-        {
-            $a = new \Paulodiff\RainbowTableIndex\Tests\Models\Author();
-        }
-        catch (\Exception $e)
-        {
-            $a = new \App\Models\Author();
-        }
-*/
-
-/*
-        Log::channel('stderr')->info('SeedData:', ['destroy authors rainbox index... ']);
-        $a::destroyRainbowIndex();
-
-        Log::channel('stderr')->info('SeedData:', ['destroy authors table... ']);
-        try
-        {
-            $a::truncate();
-        } 
-        catch (\Exception $e) 
-        {
-            Log::channel('stderr')->error('SeedData:', ['ERROR deleting Authors table', $e] );
-            // die("ERRORE RainbowTableService re check previuos step!" . $e );
-        }
-
-        Log::channel('stderr')->info('SeedData:', ['start insert! ... ']);
-
-        for($i=0;$i<$numOfAuthors;$i++)
-        {
-            // $p = new Author();
-
-            if ( class_exists('\Paulodiff\RainbowTableIndex\Tests\Models\Author') )
-            {
-                $p = new \Paulodiff\RainbowTableIndex\Tests\Models\Author();
-            }
-            else
-            {
-                $p = new \App\Models\Author();
-            }
-    
-
-
-            $p->name = strtoupper($faker->name());
-            $p->name_enc = $p->name;
-
-            $p->card_number = $faker->creditCardNumber('Visa');
-            $p->card_number_enc = $p->card_number;
-
-            $p->address = $faker->streetAddress();
-            $p->address_enc = $p->address;
-
-            $p->role =  $faker->randomElement(['author', 'reader', 'admin', 'user', 'publisher']);
-            $p->role_enc =  $p->role;
-
-            $p->save();
-
-            Log::channel('stderr')->info('SeedData:' . $i . '#' . $numOfAuthors .']Author Added!:', [$p->toArray()]);
-            /*
-            // Adding Posts
-            for($j=0;$j<$numOfPosts;$j++)
-            {
-              $q = new Post();
-              $q->title = strtoupper($faker->name());
-              $q->title_enc = $q->title;
-              $q->author_id = $p->id;
-              $q->save();
-              Log::channel('stderr')->info('SeedData:' . $j . '#' . $numOfPosts .']Post Added!:', [$q->toArray()]);
-            }
-            
-            
-        }
-        */
 
         Log::channel('stderr')->info('SeedData startFrom:',  [$startFrom]);
         
