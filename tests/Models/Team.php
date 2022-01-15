@@ -35,7 +35,7 @@ class Team extends Model
         ]
     ];
     
-    public function team_type()
+    public function teamType()
     {
         return $this->hasOne(TeamType::class);
     }

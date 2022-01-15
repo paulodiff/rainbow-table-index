@@ -22,7 +22,7 @@ class TeamType extends Model
     public static $rainbowTableIndexConfig = [
           'table' => [
             'primaryKey' => 'team_type_id',
-            'tableName' => 'teams',
+            'tableName' => 'team_types',
         ],
         'fields' => [
             [

@@ -1,7 +1,7 @@
 <?php
 namespace Paulodiff\RainbowTableIndex\Console;
 
-//.\vendor\bin\phpunit --filter the_db_seed_command tests\Unit\DbSeedCommandTest.php
+//.\vendor\bin\phpunit --filter the_db_relational_command tests\Unit\DbRelationalCommandTest.php
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -213,7 +213,7 @@ class RainbowTableIndexDbRelationalCommand extends Command
             }
             else
             {
-                $team = new \App\Models\TeamType();
+                $team = new \App\Models\Team();
             }
             $team->team_name = 'TEAM_' . ($i + 1);
             $team->team_name_enc = $team->team_name;
@@ -282,27 +282,32 @@ class RainbowTableIndexDbRelationalCommand extends Command
             }
 
             // $rs = $roster::all();
-            $result = $roster::all();
+            // $result = $roster::all();
 
-            $collection = collect($result->toArray());
+            $result = $roster::with(['team', 'player', 'playerRole'])->get();
 
-            $sorted = $collection->sortBy([
-                fn ($a, $b) => $a['roster_description'] <=> $b['roster_description'],
+
+            // $collection = collect($result->toArray());
+
+            $sorted = $result->sortBy([
+                ['roster_description', 'desc'],
+                ['team.team_name', 'desc'],
+                // fn ($a, $b) => $a['roster_description'] <=> $b['roster_description'],
                 // fn ($a, $b) => $b['team_name'] <=> $a['team_name'],
             ]);
             
-            $sorted->values()->all();
+            // $sorted->values()->all();
 
-            print_r($sorted->values()->all());
+            //print_r($sorted->toArray());
 
-            exit(234324);
+            //exit(234324);
            
-            Log::channel('stderr')->info('', [$result->toArray()]);
+            //Log::channel('stderr')->info('', [$result->toArray()]);
 
             // print_r($result->toArray());
 
 
-            foreach ($result as $rs) {
+            foreach ($sorted as $rs) {
                 Log::channel('stderr')->info('Quering:...', [
                     //$rs->toArray(),
                     $rs->roster_description,
