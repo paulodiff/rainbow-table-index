@@ -406,7 +406,7 @@ php artisan RainbowTableIndex:dbCrud 100
 ### STOP Rainbow index is configured and running!, you want can test with a web app
 
 This is a web app demo crud with 5 tables:
-
+```bash
 Player
     'player_id'
     'player_name',           // ENCRYPTED
@@ -437,12 +437,16 @@ Roster
     'roster_player_role_id',
     'roster_amount',       // ENCRYPTED
 
+```
 
 Livewire installation
+composer require livewire/livewire
 
 Set Mysql
 Set .env
-
+Copy Model and rename path foreach model
+Copy resource
+Copy web.app
 
 
 
@@ -463,13 +467,11 @@ resources/views/livewire/authors.blade.php
 
 
 ```
-## Security customization
+# Security customization
 
-- Laravel Encrypt/Decrypt
+- Laravel Encrypt/Decrypt functions
 - Hash
 
-
-### Using test
 
 
 # Service operation
