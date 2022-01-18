@@ -518,6 +518,16 @@ for ($w=3;$w<= strlen($s); $w++) $numOfEntries += (strlen($s) + 1 - $w);
 
 sanitize_string
 
+# Final consideration
+
+- Pros
+-- Encryption! Encryption!! Encryption!!!
+
+Cons
+- OrderBy on encrypted data doesn't WORK! -> Use collection sort!
+- Other SQL function (SUM,MIN, ecc.) doesn't WORK
+- Search overhead
+
 # Future works
 
 -----
