@@ -405,7 +405,52 @@ php artisan RainbowTableIndex:dbCrud 100
 
 ### STOP Rainbow index is configured and running!, you want can test with a web app
 
+This is a web app demo crud with 5 tables:
+
+Player
+    'player_id'
+    'player_name',           // ENCRYPTED
+    'player_address',  
+    'player_credit_card_no', // ENCRYPTED
+    'player_phone',
+
+PlayerRole
+    'player_role_id'
+    'player_role_description', // ENCRYPTED
+    'player_role_salary',
+
+Team
+    'team_id',   // ENCRYPTED
+    'team_name',
+    'team_type_id', (1-1 with TeamType)
+
+TeamType
+    'team_type_id'
+    'team_type_description',  // ENCRYPTED
+    'team_type_rules',
+
+Roster
+    'roster_id'
+    'roster_description',  // ENCRYPTED
+    'roster_player_id',
+    'roster_team_id',
+    'roster_player_role_id',
+    'roster_amount',       // ENCRYPTED
+
+
 Livewire installation
+
+Set Mysql
+Set .env
+
+
+
+
+```bash
+php artisan RainbowTableIndex:dbCrud 100
+php artisan optmize
+php artisan serve
+```
 
 composer require livewire/livewire
 
