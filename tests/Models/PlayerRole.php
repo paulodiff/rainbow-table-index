@@ -15,8 +15,7 @@ class PlayerRole extends Model
 
     protected $fillable = [
         'player_role_description', 
-        'player_role_description_enc', 
-        'player_role_fee', 
+        'player_role_salary', 
     ];
 
     public static $rainbowTableIndexConfig = [
@@ -26,7 +25,7 @@ class PlayerRole extends Model
         ],
         'fields' => [
             [
-              'fName' => 'player_role_description_enc',
+              'fName' => 'player_role_description',
               'fType' => 'ENCRYPTED_FULL_TEXT',
               'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
               'fTransform' => 'UPPER_CASE',
@@ -35,9 +34,5 @@ class PlayerRole extends Model
         ]
     ];
     
-    public function rosters()
-    {
-        return $this->hasMany(Roster::class);
-    }
 
 }

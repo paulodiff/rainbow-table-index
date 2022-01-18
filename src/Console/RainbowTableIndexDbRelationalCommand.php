@@ -44,12 +44,10 @@ class RainbowTableIndexDbRelationalCommand extends Command
             Schema::create('rosters', function (Blueprint $table) {
                 $table->increments('roster_id');
                 $table->text('roster_description');
-                $table->text('roster_description_enc'); 
                 $table->integer('roster_player_id');
                 $table->integer('roster_team_id'); 
                 $table->integer('roster_player_role_id');
                 $table->text('roster_amount'); 
-                $table->text('roster_amount_enc');
                 $table->timestamps();
             });
             Log::channel('stderr')->info('CheckConfig:', ['table rosters created'] );
@@ -66,10 +64,8 @@ class RainbowTableIndexDbRelationalCommand extends Command
             Schema::create('players', function (Blueprint $table) {
                 $table->increments('player_id');
                 $table->text('player_name');
-                $table->text('player_name_enc'); 
                 $table->text('player_address'); 
                 $table->text('player_credit_card_no'); 
-                $table->text('player_credit_card_no_enc'); 
                 $table->text('player_phone'); 
                 $table->timestamps();
             });
@@ -87,7 +83,6 @@ class RainbowTableIndexDbRelationalCommand extends Command
             Schema::create('teams', function (Blueprint $table) {
                 $table->increments('team_id');
                 $table->text('team_name');
-                $table->text('team_name_enc'); 
                 $table->integer('team_type_id'); 
                 $table->timestamps();
             });
@@ -106,8 +101,7 @@ class RainbowTableIndexDbRelationalCommand extends Command
             Schema::create('player_roles', function (Blueprint $table) {
                 $table->increments('player_role_id');
                 $table->text('player_role_description');
-                $table->text('player_role_description_enc');
-                $table->text('player_role_fee'); 
+                $table->text('player_role_salary'); 
                 $table->timestamps();
             });
             Log::channel('stderr')->info('CheckConfig:', ['table player_roles created'] );
@@ -125,7 +119,6 @@ class RainbowTableIndexDbRelationalCommand extends Command
             Schema::create('team_types', function (Blueprint $table) {
                 $table->increments('team_type_id');
                 $table->text('team_type_description');
-                $table->text('team_type_description_enc');
                 $table->text('team_type_rules'); 
                 $table->timestamps();
             });
@@ -172,14 +165,10 @@ class RainbowTableIndexDbRelationalCommand extends Command
                 $p = new \App\Models\Player();
             }
             $p->player_name = 'PLAYER_' . ($i + 1);
-            $p->player_name_enc = $p->player_name;
-
             $p->player_address = $faker->streetAddress();
-
             $p->player_credit_card_no = $faker->creditCardNumber('Visa');
-            $p->player_credit_card_no_enc = $p->player_credit_card_no;
-
             $p->player_phone = $faker->phoneNumber();
+
             $p->save();
         }
         Log::channel('stderr')->info('Seeding:TeamType', [] );
@@ -195,9 +184,6 @@ class RainbowTableIndexDbRelationalCommand extends Command
                 $teamType = new \App\Models\TeamType();
             }
             $teamType->team_type_description = 'TEAM_TYPE_DESC_' . ($i + 1);
-            $teamType->team_type_description_enc = $teamType->team_type_description;
-
-
             $teamType->team_type_rules = $faker->phoneNumber();
             $teamType->save();
         }
@@ -213,11 +199,9 @@ class RainbowTableIndexDbRelationalCommand extends Command
             }
             else
             {
-                $team = new \App\Models\Team();
+                $team = new \App\Models\Team    ();
             }
             $team->team_name = 'TEAM_' . ($i + 1);
-            $team->team_name_enc = $team->team_name;
-
             $team->team_type_id = $faker->numberBetween(1, $numOfTeamTypes);
             $team->save();
         }
@@ -235,9 +219,7 @@ class RainbowTableIndexDbRelationalCommand extends Command
                 $playerRole = new \App\Models\PlayerRole();
             }
             $playerRole->player_role_description = 'PLAYER_ROLE_' . ($i + 1);
-            $playerRole->player_role_description_enc = $playerRole->player_role_description;
-
-            $playerRole->player_role_fee = $faker->numberBetween(1, 50000);
+            $playerRole->player_role_salary = $faker->numberBetween(1, 50000);
             $playerRole->save();
         }
 
@@ -253,14 +235,11 @@ class RainbowTableIndexDbRelationalCommand extends Command
                 $roster = new \App\Models\Roster();
             }
             $roster->roster_description = 'ROSTER_' . $faker->numberBetween(1, 3);
-            $roster->roster_description_enc = $roster->roster_description;
-
             $roster->roster_player_id = $faker->numberBetween(1, $numOfPlayers);
             $roster->roster_team_id = $faker->numberBetween(1, $numOfTeams);
             $roster->roster_player_role_id = $faker->numberBetween(1, $numOfPlayerRoles);
 
             $roster->roster_amount = $faker->numberBetween(1, 50000);
-            $roster->roster_amount_enc = $roster->roster_amount;
 
             $roster->save();
         }
@@ -284,7 +263,7 @@ class RainbowTableIndexDbRelationalCommand extends Command
             // $rs = $roster::all();
             // $result = $roster::all();
 
-            $result = $roster::with(['team', 'player', 'playerRole'])->get();
+            $result = $roster::with(['team', 'player', 'player_role'])->get();
 
 
             // $collection = collect($result->toArray());
@@ -313,8 +292,7 @@ class RainbowTableIndexDbRelationalCommand extends Command
                     $rs->roster_description,
                     $rs->team->team_name,
                     $rs->player->player_name,
-                    $rs->playerRole->player_role_description,
-                    $rs->playerRole->player_role_description_enc,
+                    $rs->player_role->player_role_description,
                 ]);
                 // Log::channel('stderr')->info('Quering:...', [$rs->team->team_name] );
             }

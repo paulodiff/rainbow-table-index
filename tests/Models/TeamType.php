@@ -15,7 +15,6 @@ class TeamType extends Model
 
     protected $fillable = [
         'team_type_description', 
-        'team_type_description_enc',
         'team_type_rules', 
     ];
 
@@ -26,18 +25,13 @@ class TeamType extends Model
         ],
         'fields' => [
             [
-              'fName' => 'team_type_description_enc',
+              'fName' => 'team_type_description',
               'fType' => 'ENCRYPTED_FULL_TEXT',
-              'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
+              'fSafeChars' => " _'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
               'fTransform' => 'UPPER_CASE',
               'fMinTokenLen' => 3,
             ]
         ]
     ];
     
-    public function teams()
-    {
-        return $this->hasMany(Team::class);
-    }
-
 }

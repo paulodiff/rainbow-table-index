@@ -15,11 +15,9 @@ class Player extends Model
 
     protected $fillable = [
         'player_name', 
-        'player_name_enc', 
         'player_address', 
         'player_credit_card_no', 
-        'player_credit_card_no_enc', 
-        'player_phome', 
+        'player_phone', 
     ];
 
     public static $rainbowTableIndexConfig = [
@@ -29,14 +27,14 @@ class Player extends Model
         ],
         'fields' => [
             [
-              'fName' => 'player_name_enc',
+              'fName' => 'player_name',
               'fType' => 'ENCRYPTED_FULL_TEXT',
-              'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
+              'fSafeChars' => " '_àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
               'fTransform' => 'UPPER_CASE',
               'fMinTokenLen' => 3,
             ],
             [
-                'fName' => 'player_credit_card_no_enc',
+                'fName' => 'player_credit_card_no',
                 'fType' => 'ENCRYPTED_FULL_TEXT',
                 'fSafeChars' => '1234567890',
                 'fTransform' => 'NONE',
@@ -45,10 +43,5 @@ class Player extends Model
 
         ]
     ];
-    
-    public function rosters()
-    {
-        return $this->hasMany(Roster::class);
-    }
 
 }

@@ -15,8 +15,11 @@ class Team extends Model
 
     protected $fillable = [
         'team_name', 
-        'team_name_enc',
         'team_type_id', 
+    ];
+
+    protected $with = [
+        'team_type'
     ];
 
     public static $rainbowTableIndexConfig = [
@@ -26,18 +29,18 @@ class Team extends Model
         ],
         'fields' => [
             [
-              'fName' => 'team_name_enc',
+              'fName' => 'team_name',
               'fType' => 'ENCRYPTED_FULL_TEXT',
-              'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
+              'fSafeChars' => " '_àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
               'fTransform' => 'UPPER_CASE',
               'fMinTokenLen' => 3,
             ]
         ]
     ];
     
-    public function teamType()
+    public function team_type()
     {
-        return $this->hasOne(TeamType::class);
+        return $this->hasOne(TeamType::class, 'team_type_id', 'team_type_id');
     }
 
 }

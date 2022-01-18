@@ -15,12 +15,16 @@ class Roster extends Model
 
     protected $fillable = [
         'roster_description', 
-        'roster_description_enc', 
         'roster_player_id',
         'roster_team_id',
         'roster_player_role_id', 
         'roster_amount', 
-        'roster_amount_enc', 
+    ];
+
+    protected $with = [
+        'team',
+        'player',
+        'player_role'
     ];
 
     public static $rainbowTableIndexConfig = [
@@ -30,14 +34,14 @@ class Roster extends Model
         ],
         'fields' => [
             [
-              'fName' => 'roster_description_enc',
+              'fName' => 'roster_description',
               'fType' => 'ENCRYPTED_FULL_TEXT',
               'fSafeChars' => " 'àèéìòùqwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.",
               'fTransform' => 'UPPER_CASE',
               'fMinTokenLen' => 3,
             ],
             [
-                'fName' => 'roster_amount_enc',
+                'fName' => 'roster_amount',
                 'fType' => 'ENCRYPTED_FULL_TEXT',
                 'fSafeChars' => " 0123456789.",
                 'fTransform' => 'UPPER_CASE',
@@ -57,7 +61,7 @@ class Roster extends Model
         return $this->hasOne(Player::class, 'player_id', 'roster_player_id');
     }
 
-    public function playerRole()
+    public function player_role()
     {
         return $this->hasOne(PlayerRole::class, 'player_role_id', 'roster_player_role_id');
     }

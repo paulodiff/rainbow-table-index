@@ -19,7 +19,7 @@ class DbRelationalCommandTest extends TestCase
         // }
         // $this->assertFalse(File::exists(config_path('blogpackage.php')));
         Log::channel('stderr')->info('php artisan RainbowTableIndex:dbRelational command', [] );
-        Artisan::call('RainbowTableIndex:dbRelational 2');
+        Artisan::call('RainbowTableIndex:dbRelational 0');
 
         // $this->assertTrue(File::exists(config_path('blogpackage.php')));
         $this->assertTrue(true);
